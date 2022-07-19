@@ -1,10 +1,20 @@
-import { Link, Outlet } from 'react-router-dom';
+import { useState, useTransition } from 'react';
+import { Spinner } from '@chakra-ui/react';
 
-const Home = ({ text }: { text: string }) => {
+const Home = () => {
+  const [isPending, startTransition] = useTransition();
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    startTransition(() => {
+      setCount((c) => c + 1);
+    });
+  }
+
   return (
     <div>
-      <Link to={text}>Link to {text}</Link>
-      <Outlet />
+      {isPending && <Spinner />}
+      <button onClick={handleClick}>{count}</button>
     </div>
   );
 };

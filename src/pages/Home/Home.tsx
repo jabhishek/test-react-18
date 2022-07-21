@@ -1,25 +1,35 @@
-import { useState, useTransition } from 'react';
-import { Spinner } from '@chakra-ui/react';
-import { useTransactionsAggregateQuery } from '../../generated/graphql';
+import { usePortfoliosQuery, useTransactionsAggregateQuery } from '../../generated/graphql';
+import { Box, Select } from '@chakra-ui/react';
+import { useState } from 'react';
 
 const Home = () => {
-  const [isPending, startTransition] = useTransition();
-  const [count, setCount] = useState(0);
-
-  const { data, loading } = useTransactionsAggregateQuery();
-
-  function handleClick() {
-    startTransition(() => {
-      setCount((c) => c + 1);
-    });
-  }
+  const [selectedPortfolio, setSelectedPortfolio] = useState<string | null>(null);
+  const { data: portfolios, loading: portfoliosLoading } = usePortfoliosQuery();
+  const { data, loading } = useTransactionsAggregateQuery({
+    variables: {
+      pfIds: selectedPortfolio,
+    },
+    skip: !selectedPortfolio,
+  });
 
   console.log('data, loading', data, loading);
+  console.log('portfolios, loading', portfolios?.portfolios, portfoliosLoading);
 
   return (
     <div>
-      {isPending && <Spinner />}
-      <button onClick={handleClick}>{count}</button>
+      <Box p={4}>
+        <Select
+          w={300}
+          mb={4}
+          value={selectedPortfolio as string}
+          onChange={(e) => {
+            setSelectedPortfolio(e.target.value);
+          }}>
+          {portfolios?.portfolios?.map((x) => {
+            return <option value={x?._id as string}>{x?.name}</option>;
+          })}
+        </Select>
+      </Box>
     </div>
   );
 };

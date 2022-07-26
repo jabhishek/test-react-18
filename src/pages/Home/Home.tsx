@@ -1,60 +1,12 @@
-import {
-  TransactionsAggregateQuery,
-  usePortfoliosQuery,
-  useTransactionsAggregateQuery,
-} from '../../generated/graphql';
-import { Box, Grid } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { Select as ChakraSelect } from 'chakra-react-select';
-import { HoldingsSection } from './HoldingsSection';
+import { Box } from '@chakra-ui/react';
+import { useAllSecuritiesQuery } from '../../generated/graphql';
 
-export type Option<T = string> = { value: T; label: string };
 const Home = () => {
-  const [selectedPortfolio, setSelectedPortfolio] = useState<Array<Option> | undefined>(undefined);
-  const { data, loading } = useTransactionsAggregateQuery({
-    variables: {
-      pfIds: selectedPortfolio?.map((x) => x.value)?.join(','),
-    },
-    skip: !selectedPortfolio?.length,
-  });
+  const { data, loading } = useAllSecuritiesQuery();
 
-  const [latestData, setLatestData] = useState<TransactionsAggregateQuery | undefined>(undefined);
+  console.log('data, loading', data, loading);
 
-  useEffect(() => {
-    if (data) {
-      setLatestData(data);
-    }
-    if (!selectedPortfolio?.length) {
-      setLatestData(undefined);
-    }
-  }, [data, selectedPortfolio]);
-
-  const { data: portfolios } = usePortfoliosQuery();
-
-  const pfOptions = portfolios?.portfolios?.map((x) => ({
-    value: x?._id ?? '',
-    label: x?.name ?? '',
-  }));
-
-  return (
-    <div>
-      <Box p={4}>
-        <Grid templateColumns={'repeat(3, 1fr)'} pb={4} gridGap={2}>
-          <ChakraSelect<Option, true>
-            isMulti
-            options={pfOptions}
-            value={selectedPortfolio}
-            onChange={(value) => {
-              setSelectedPortfolio([...value]);
-            }}
-          />
-        </Grid>
-        <Box opacity={loading ? 0.5 : 1}>
-          <HoldingsSection aggregate={latestData?.transactionsAggregate} />
-        </Box>
-      </Box>
-    </div>
-  );
+  return <Box>Home</Box>;
 };
 
 export default Home;

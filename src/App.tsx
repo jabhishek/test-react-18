@@ -4,6 +4,7 @@ import { Spinner } from '@chakra-ui/react';
 import { AppHeader } from './components/AppHeader';
 
 const LazyHome = React.lazy(() => import('./pages/Home/Home'));
+const LazyPortfolios = React.lazy(() => import('./pages/Portfolios/index'));
 
 function App() {
   return (
@@ -16,6 +17,14 @@ function App() {
             element={
               <React.Suspense fallback={<Spinner />}>
                 <LazyHome />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path="/portfolios"
+            element={
+              <React.Suspense fallback={<Spinner />}>
+                <LazyPortfolios />
               </React.Suspense>
             }
           />

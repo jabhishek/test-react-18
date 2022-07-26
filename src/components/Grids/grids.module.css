@@ -1,0 +1,9 @@
+.flex {
+    display: flex;
+    line-height: 1.2;
+    overflow: hidden;
+}
+
+.justifyRight {
+    justify-content: flex-end;
+}

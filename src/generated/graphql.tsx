@@ -206,6 +206,19 @@ export type IHistoricalQuoteEod = {
   volume?: Maybe<Scalars['Float']>;
 };
 
+export type ILiveQuoteEod = {
+  __typename?: 'ILiveQuoteEod';
+  change?: Maybe<Scalars['Float']>;
+  change_p?: Maybe<Scalars['Float']>;
+  close?: Maybe<Scalars['Float']>;
+  high?: Maybe<Scalars['Float']>;
+  low?: Maybe<Scalars['Float']>;
+  open?: Maybe<Scalars['Float']>;
+  previousClose?: Maybe<Scalars['Float']>;
+  timestamp?: Maybe<Scalars['Float']>;
+  volume?: Maybe<Scalars['Float']>;
+};
+
 export type IPossibleTrade = {
   __typename?: 'IPossibleTrade';
   close?: Maybe<Scalars['Float']>;
@@ -357,14 +370,15 @@ export type Query = {
   getHistoricalEvents?: Maybe<Array<Maybe<IHistoricalEvent>>>;
   getHistoricalQuotesForStock?: Maybe<Array<Maybe<IHistoricalQuoteEod>>>;
   getPortfoliosForUsers?: Maybe<SuccessResponse>;
+  liveQuote?: Maybe<ILiveQuoteEod>;
   portfolios?: Maybe<Array<Maybe<Portfolio>>>;
   renamePfId?: Maybe<SuccessResponse>;
   resetQuoteDate?: Maybe<SuccessResponse>;
   searchSecurity?: Maybe<Array<Maybe<SearchSecurity>>>;
   security?: Maybe<Security>;
   setHistoricalPortfolioStates?: Maybe<SuccessResponse>;
-  transactions?: Maybe<Array<Maybe<Transaction>>>;
-  transactionsAggregate?: Maybe<TrxAggregate>;
+  transactions: Array<Maybe<Transaction>>;
+  transactionsAggregate: TrxAggregate;
   updateTransactionSymbol?: Maybe<SuccessResponse>;
 };
 
@@ -420,6 +434,11 @@ export type QueryGetHistoricalEventsArgs = {
 
 export type QueryGetHistoricalQuotesForStockArgs = {
   interval?: InputMaybe<Scalars['String']>;
+  symbol: Scalars['String'];
+};
+
+
+export type QueryLiveQuoteArgs = {
   symbol: Scalars['String'];
 };
 
@@ -616,9 +635,9 @@ export type TransactionInput = {
 export type TrxAggregate = {
   __typename?: 'TrxAggregate';
   cash: Cash;
-  holdings?: Maybe<Array<Maybe<StockTransactions>>>;
-  statement?: Maybe<Array<Maybe<StatementEntry>>>;
-  transactions?: Maybe<Array<Maybe<Transaction>>>;
+  holdings: Array<Maybe<StockTransactions>>;
+  statement: Array<Maybe<StatementEntry>>;
+  transactions: Array<Maybe<Transaction>>;
 };
 
 
@@ -655,13 +674,20 @@ export type AllSecuritiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AllSecuritiesQuery = { __typename?: 'Query', allSecurities?: Array<{ __typename?: 'Equity', _id: string, country?: string | null, name: string, symbol: string, type?: Type | null, currentStatus?: Array<{ __typename?: 'ICurrentStatus', aroon200Strategy?: { __typename?: 'IPossibleTrade', date?: string | null } | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', pf?: { __typename?: 'Portfolio', name?: string | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Fund', _id: string, country?: string | null, name: string, symbol: string, type?: Type | null, currentStatus?: Array<{ __typename?: 'ICurrentStatus', aroon200Strategy?: { __typename?: 'IPossibleTrade', date?: string | null } | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', pf?: { __typename?: 'Portfolio', name?: string | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Index', _id: string, country?: string | null, name: string, symbol: string, type?: Type | null, currentStatus?: Array<{ __typename?: 'ICurrentStatus', aroon200Strategy?: { __typename?: 'IPossibleTrade', date?: string | null } | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', pf?: { __typename?: 'Portfolio', name?: string | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | null> | null };
 
+export type GetLiveQuoteQueryVariables = Exact<{
+  symbol: Scalars['String'];
+}>;
+
+
+export type GetLiveQuoteQuery = { __typename?: 'Query', liveQuote?: { __typename?: 'ILiveQuoteEod', close?: number | null, previousClose?: number | null } | null };
+
 export type TransactionsAggregateQueryVariables = Exact<{
   pfIds?: InputMaybe<Scalars['String']>;
   dateTo?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type TransactionsAggregateQuery = { __typename?: 'Query', transactionsAggregate?: { __typename?: 'TrxAggregate', statement?: Array<{ __typename?: 'StatementEntry', _id: string, symbol: string, assetType: AssetType, trxType: string, date: string, amount: number, balance?: number | null, comment?: string | null, portfolio?: { __typename?: 'Portfolio', _id?: string | null, name?: string | null } | null, security?: { __typename?: 'Equity', name: string } | { __typename?: 'Fund', name: string } | { __typename?: 'Index', name: string } | null } | null> | null, holdings?: Array<{ __typename?: 'StockTransactions', symbol: string, assetType: string, qty: number, costPrice?: number | null, profitLossBooked?: number | null, valueAtCostPrice?: number | null, currentPrice?: number | null, valueAtCurrentPrice?: number | null, date?: string | null, currentPnL?: number | null, stock?: { __typename?: 'Equity', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Fund', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Index', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | null } | null> | null, cash: { __typename?: 'Cash', cashIn: number, cashOut: number, currentCash: number } } | null, cashTransactions?: Array<{ __typename?: 'Transaction', _id: string, date: string, amount: number, trxType: string } | null> | null };
+export type TransactionsAggregateQuery = { __typename?: 'Query', transactionsAggregate: { __typename?: 'TrxAggregate', statement: Array<{ __typename?: 'StatementEntry', _id: string, symbol: string, assetType: AssetType, trxType: string, date: string, amount: number, balance?: number | null, comment?: string | null, portfolio?: { __typename?: 'Portfolio', _id?: string | null, name?: string | null } | null, security?: { __typename?: 'Equity', name: string } | { __typename?: 'Fund', name: string } | { __typename?: 'Index', name: string } | null } | null>, holdings: Array<{ __typename?: 'StockTransactions', symbol: string, assetType: string, qty: number, costPrice?: number | null, profitLossBooked?: number | null, valueAtCostPrice?: number | null, currentPrice?: number | null, valueAtCurrentPrice?: number | null, date?: string | null, currentPnL?: number | null, stock?: { __typename?: 'Equity', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Fund', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Index', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | null } | null>, cash: { __typename?: 'Cash', cashIn: number, cashOut: number, currentCash: number } }, cashTransactions: Array<{ __typename?: 'Transaction', _id: string, date: string, amount: number, trxType: string } | null> };
 
 
 export const PortfoliosDocument = gql`
@@ -756,6 +782,42 @@ export function useAllSecuritiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type AllSecuritiesQueryHookResult = ReturnType<typeof useAllSecuritiesQuery>;
 export type AllSecuritiesLazyQueryHookResult = ReturnType<typeof useAllSecuritiesLazyQuery>;
 export type AllSecuritiesQueryResult = Apollo.QueryResult<AllSecuritiesQuery, AllSecuritiesQueryVariables>;
+export const GetLiveQuoteDocument = gql`
+    query getLiveQuote($symbol: String!) {
+  liveQuote(symbol: $symbol) {
+    close
+    previousClose
+  }
+}
+    `;
+
+/**
+ * __useGetLiveQuoteQuery__
+ *
+ * To run a query within a React component, call `useGetLiveQuoteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLiveQuoteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLiveQuoteQuery({
+ *   variables: {
+ *      symbol: // value for 'symbol'
+ *   },
+ * });
+ */
+export function useGetLiveQuoteQuery(baseOptions: Apollo.QueryHookOptions<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>(GetLiveQuoteDocument, options);
+      }
+export function useGetLiveQuoteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>(GetLiveQuoteDocument, options);
+        }
+export type GetLiveQuoteQueryHookResult = ReturnType<typeof useGetLiveQuoteQuery>;
+export type GetLiveQuoteLazyQueryHookResult = ReturnType<typeof useGetLiveQuoteLazyQuery>;
+export type GetLiveQuoteQueryResult = Apollo.QueryResult<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>;
 export const TransactionsAggregateDocument = gql`
     query TransactionsAggregate($pfIds: String, $dateTo: String) {
   transactionsAggregate(pfIds: $pfIds) {

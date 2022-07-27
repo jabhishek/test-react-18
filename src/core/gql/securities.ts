@@ -30,3 +30,12 @@ export const AllSecurities = gql`
     }
   }
 `;
+
+export const LIVE_QUOTE = gql`
+  query getLiveQuote($symbol: String!) {
+    liveQuote(symbol: $symbol) {
+      close
+      previousClose
+    }
+  }
+`;

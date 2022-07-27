@@ -1,98 +1,40 @@
 import { TransactionsAggregateQuery } from '../../generated/graphql';
 import { AgGridReact } from '@ag-grid-community/react';
-import { ColDef, ICellRendererParams } from '@ag-grid-community/core';
+import { ColDef } from '@ag-grid-community/core';
 import { AllCommunityModules } from '@ag-grid-community/all-modules';
 import '@ag-grid-community/core/dist/styles/ag-grid.css';
 import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
-import { Box } from '@chakra-ui/react';
 import styles from './grids.module.css';
-
-export const formatNumberWithComma = (value: number | string) => {
-  if (typeof value !== 'number') {
-    return '';
-  }
-
-  return value.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-};
-
-export const SecurityNameCellRenderer = (props: ICellRendererParams) => {
-  const { data } = props as {
-    data: NonNullable<
-      NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['holdings']
-    >[number];
-  };
-  return (
-    <Box sx={{ lineHeight: 1.3 }}>
-      <Box>{data?.stock?.name}</Box>
-      <Box>{data?.symbol}</Box>
-    </Box>
-  );
-};
-
-export const PriceCellRenderer = (props: ICellRendererParams) => {
-  const { data } = props as {
-    data: NonNullable<
-      NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['holdings']
-    >[number];
-  };
-  return (
-    <Box sx={{ lineHeight: 1.3, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-      <Box>{formatNumberWithComma(data?.currentPrice ?? 0)}</Box>
-      <Box>{formatNumberWithComma(data?.costPrice ?? 0)}</Box>
-    </Box>
-  );
-};
-
-export const ValueCellRenderer = (props: ICellRendererParams) => {
-  const { data } = props as {
-    data: NonNullable<
-      NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['holdings']
-    >[number];
-  };
-  const isProfit = (data?.valueAtCurrentPrice ?? 0) > (data?.valueAtCostPrice ?? 0);
-  return (
-    <Box sx={{ lineHeight: 1.3, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-      <Box color={isProfit ? 'green.400' : 'red.400'}>
-        {formatNumberWithComma(data?.valueAtCurrentPrice ?? 0)}
-      </Box>
-      <Box>{formatNumberWithComma(data?.valueAtCostPrice ?? 0)}</Box>
-    </Box>
-  );
-};
-
-export const DividendCellRenderer = (
-  props: ICellRendererParams & {
-    aggregate: TransactionsAggregateQuery['transactionsAggregate'];
-  },
-) => {
-  const { data, aggregate } = props as {
-    data: NonNullable<
-      NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['holdings']
-    >[number];
-    aggregate: TransactionsAggregateQuery['transactionsAggregate'];
-  };
-
-  const symbol = data?.symbol;
-
-  const dividends = aggregate?.statement
-    ?.filter((x) => x?.symbol === symbol && x?.trxType === 'dividend')
-    ?.reduce((acc, d) => {
-      return acc + (d?.amount ?? 0);
-    }, 0);
-  return (
-    <Box sx={{ lineHeight: 1.3, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-      <Box>{dividends}</Box>
-    </Box>
-  );
-};
+import { useState } from 'react';
+import {
+  formatNumberWithComma,
+  LiveQuoteCellRenderer,
+  PriceCellRenderer,
+  SecurityNameCellRenderer,
+  ValueCellRenderer,
+} from './cellRenderers';
 
 export const HoldingsGrid = ({
   holdings,
   statements,
 }: {
-  statements: NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['statement'];
-  holdings: NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['holdings'];
+  statements:
+    | NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['statement']
+    | undefined;
+  holdings:
+    | NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['holdings']
+    | undefined;
 }) => {
+  const [liveQuotes, setLiveQuotes] = useState<Map<string, number>>(new Map());
+
+  const addLiveQuote = (symbol: string, quote: number) => {
+    if (!liveQuotes.has(symbol)) {
+      const existing = new Map(liveQuotes);
+      existing.set(symbol, quote);
+      setLiveQuotes(existing);
+    }
+  };
+
   const columnDefs: ColDef[] = [
     {
       field: 'stock.name',
@@ -105,6 +47,18 @@ export const HoldingsGrid = ({
       field: 'qty',
       minWidth: 100,
       resizable: true,
+      cellClass: `${styles.flex} ${styles.justifyRight}`,
+      headerClass: `ag-right-aligned-header`,
+      valueFormatter: ({ value }) => {
+        return formatNumberWithComma(value);
+      },
+    },
+    {
+      field: 'liveQuote',
+      minWidth: 150,
+      resizable: true,
+      cellRenderer: LiveQuoteCellRenderer,
+      cellRendererParams: { addLiveQuote },
       cellClass: `${styles.flex} ${styles.justifyRight}`,
       headerClass: `ag-right-aligned-header`,
     },

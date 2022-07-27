@@ -25,7 +25,7 @@ const holdingOptions: Array<Option<IHoldingOption>> = [
 export const HoldingsSection = ({
   aggregate,
 }: {
-  aggregate: TransactionsAggregateQuery['transactionsAggregate'];
+  aggregate: TransactionsAggregateQuery['transactionsAggregate'] | undefined;
 }) => {
   const [selectedHoldingFilter, setSelectedHoldingFilter] = useState<
     Option<IHoldingOption> | undefined

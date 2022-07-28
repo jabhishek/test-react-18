@@ -5,7 +5,7 @@ import { AllCommunityModules } from '@ag-grid-community/all-modules';
 import '@ag-grid-community/core/dist/styles/ag-grid.css';
 import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
 import styles from './grids.module.css';
-import { useState } from 'react';
+import { useMemo, useState, useTransition } from 'react';
 import {
   formatNumberWithComma,
   LiveQuoteCellRenderer,
@@ -27,13 +27,36 @@ export const HoldingsGrid = ({
 }) => {
   const [liveQuotes, setLiveQuotes] = useState<Map<string, number>>(new Map());
 
+  const [loading, startTransition] = useTransition();
+
   const addLiveQuote = (symbol: string, quote: number) => {
     if (!liveQuotes.has(symbol)) {
       const existing = new Map(liveQuotes);
       existing.set(symbol, quote);
-      setLiveQuotes(existing);
+      startTransition(() => setLiveQuotes(existing));
     }
   };
+
+  const holdingsValue = useMemo(
+    () =>
+      holdings
+        ?.filter((x) => x?.qty && x.qty > 0)
+        ?.reduce((a, b) => {
+          return (b?.valueAtCurrentPrice ?? 0) + a;
+        }, 0) ?? 0,
+    [holdings],
+  );
+
+  const enhancedHoldings = useMemo(() => {
+    return holdings?.map((x) => {
+      return {
+        ...x,
+        weightage: holdingsValue ? (x?.valueAtCurrentPrice ?? 0) / holdingsValue : 0,
+      };
+    });
+  }, [holdings, holdingsValue]);
+
+  console.log('loading', loading);
 
   const columnDefs: ColDef[] = [
     {
@@ -50,7 +73,17 @@ export const HoldingsGrid = ({
       cellClass: `${styles.flex} ${styles.justifyRight}`,
       headerClass: `ag-right-aligned-header`,
       valueFormatter: ({ value }) => {
-        return formatNumberWithComma(value);
+        return formatNumberWithComma(value, 2);
+      },
+    },
+    {
+      field: 'weightage',
+      minWidth: 100,
+      resizable: true,
+      cellClass: `${styles.flex} ${styles.justifyRight}`,
+      headerClass: `ag-right-aligned-header`,
+      valueFormatter: ({ value }) => {
+        return formatNumberWithComma(value * 100);
       },
     },
     {
@@ -136,7 +169,7 @@ export const HoldingsGrid = ({
             autoHeight: true,
             filter: true,
           }}
-          rowData={holdings ?? []}
+          rowData={enhancedHoldings ?? []}
           domLayout={'autoHeight'}
           modules={AllCommunityModules}
         />

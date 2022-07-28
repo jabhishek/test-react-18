@@ -3,12 +3,12 @@ import { TransactionsAggregateQuery, useGetLiveQuoteQuery } from '../../generate
 import { Box } from '@chakra-ui/react';
 import { useEffect } from 'react';
 
-export const formatNumberWithComma = (value: number | string) => {
+export const formatNumberWithComma = (value: number | string, decimalPlaces: number = 2) => {
   if (typeof value !== 'number') {
     return '';
   }
 
-  return value.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+  return value.toFixed(decimalPlaces).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 };
 export const SecurityNameCellRenderer = (props: ICellRendererParams) => {
   const { data } = props as {
@@ -70,6 +70,7 @@ export const LiveQuoteCellRenderer = (
     </Box>
   );
 };
+
 export const ValueCellRenderer = (props: ICellRendererParams) => {
   const { data } = props as {
     data: NonNullable<
@@ -77,6 +78,8 @@ export const ValueCellRenderer = (props: ICellRendererParams) => {
     >[number];
   };
   const isProfit = (data?.valueAtCurrentPrice ?? 0) > (data?.valueAtCostPrice ?? 0);
+  console.log('ValueCellRenderer');
+
   return (
     <Box sx={{ lineHeight: 1.3, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
       <Box color={isProfit ? 'green.400' : 'red.400'}>
@@ -86,6 +89,7 @@ export const ValueCellRenderer = (props: ICellRendererParams) => {
     </Box>
   );
 };
+
 export const DividendCellRenderer = (
   props: ICellRendererParams & {
     aggregate: TransactionsAggregateQuery['transactionsAggregate'];

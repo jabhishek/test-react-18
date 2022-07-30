@@ -56,8 +56,6 @@ export const HoldingsGrid = ({
     });
   }, [holdings, holdingsValue]);
 
-  console.log('loading', loading);
-
   const columnDefs: ColDef[] = [
     {
       field: 'stock.name',

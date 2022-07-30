@@ -2,7 +2,7 @@ import { Box, Heading } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { Dispatch, SetStateAction, useState } from 'react';
 
-type ITabs = 'home' | 'events';
+type ITabs = 'home' | 'events' | 'portfolios';
 
 const Tab = ({
   routeName,
@@ -49,6 +49,13 @@ export const AppHeader = () => {
           routeName={'events'}
           to={'/events'}
           label={'Events'}
+        />
+        <Tab
+          selectedRoute={selectedRoute}
+          setSelectedRoute={setSelectedRoute}
+          routeName={'portfolios'}
+          to={'/portfolios'}
+          label={'Portfolios'}
         />
       </Box>
     </Box>

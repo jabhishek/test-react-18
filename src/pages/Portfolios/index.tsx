@@ -4,7 +4,7 @@ import {
   usePortfoliosQuery,
   useTransactionsAggregateQuery,
 } from '../../generated/graphql';
-import { Box, Grid } from '@chakra-ui/react';
+import { Box, Grid, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { Select as ChakraSelect } from 'chakra-react-select';
 import { HoldingsSection } from './HoldingsSection';
 import { Option } from '../../models/Option';
@@ -49,9 +49,28 @@ const Portfolios = () => {
             }}
           />
         </Grid>
-        <Box opacity={loading ? 0.5 : 1}>
-          <HoldingsSection aggregate={latestData?.transactionsAggregate} />
-        </Box>
+        {selectedPortfolio ? (
+          <Box opacity={loading ? 0.5 : 1}>
+            <Tabs>
+              <TabList>
+                <Tab>Holdings</Tab>
+                <Tab>Transactions</Tab>
+                <Tab>Charts</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <HoldingsSection aggregate={latestData?.transactionsAggregate} />
+                </TabPanel>
+                <TabPanel>
+                  <p>Showing transactions for selected portfolios</p>
+                </TabPanel>
+                <TabPanel>
+                  <p>Showing charts here</p>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Box>
+        ) : null}
       </Box>
     </div>
   );

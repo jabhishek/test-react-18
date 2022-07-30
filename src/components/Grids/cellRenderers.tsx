@@ -1,7 +1,7 @@
 import { ICellRendererParams } from '@ag-grid-community/core';
 import { TransactionsAggregateQuery, useGetLiveQuoteQuery } from '../../generated/graphql';
 import { Box } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 
 export const formatNumberWithComma = (value: number | string, decimalPlaces: number = 2) => {
   if (typeof value !== 'number') {
@@ -71,7 +71,7 @@ export const LiveQuoteCellRenderer = (
   );
 };
 
-export const ValueCellRenderer = (props: ICellRendererParams) => {
+export const ValueCellRenderer = memo((props: ICellRendererParams) => {
   const { data } = props as {
     data: NonNullable<
       NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['holdings']
@@ -88,7 +88,7 @@ export const ValueCellRenderer = (props: ICellRendererParams) => {
       <Box>{formatNumberWithComma(data?.valueAtCostPrice ?? 0)}</Box>
     </Box>
   );
-};
+});
 
 export const DividendCellRenderer = (
   props: ICellRendererParams & {

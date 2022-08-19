@@ -8,7 +8,7 @@ import styles from './grids.module.css';
 import { useMemo, useState, useTransition } from 'react';
 import {
   formatNumberWithComma,
-  LiveQuoteCellRenderer,
+  LiveQuoteChangeCellRenderer,
   PriceCellRenderer,
   SecurityNameCellRenderer,
   ValueCellRenderer,
@@ -88,7 +88,7 @@ export const HoldingsGrid = ({
       field: 'liveQuote',
       minWidth: 150,
       resizable: true,
-      cellRenderer: LiveQuoteCellRenderer,
+      cellRenderer: LiveQuoteChangeCellRenderer,
       cellRendererParams: { addLiveQuote },
       cellClass: `${styles.flex} ${styles.justifyRight}`,
       headerClass: `ag-right-aligned-header`,

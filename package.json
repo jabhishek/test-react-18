@@ -27,6 +27,7 @@
     "@types/react-dom": "^18.0.5",
     "chakra-react-select": "4.1.4",
     "framer-motion": "6.4.3",
+    "p-limit": "^4.0.0",
     "prettier": "2.7.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

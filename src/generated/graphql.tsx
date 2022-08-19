@@ -25,6 +25,12 @@ export type AddWatchlistInput = {
   user: Scalars['String'];
 };
 
+export type AnalyzeResponse = {
+  __typename?: 'AnalyzeResponse';
+  quotes?: Maybe<Array<Maybe<IHistoricalQuoteEnhanced>>>;
+  trades?: Maybe<Array<Maybe<IStrategyTrade>>>;
+};
+
 export enum AssetType {
   Cash = 'cash',
   Fund = 'fund',
@@ -94,6 +100,13 @@ export type HistoricalPortfolioState = {
   sells?: Maybe<Scalars['Float']>;
   version?: Maybe<Scalars['String']>;
   xirr?: Maybe<Scalars['Float']>;
+};
+
+export type IAdx = {
+  __typename?: 'IAdx';
+  adx?: Maybe<Scalars['Float']>;
+  minusDI?: Maybe<Scalars['Float']>;
+  plusDI?: Maybe<Scalars['Float']>;
 };
 
 export type IAroonStat = {
@@ -172,6 +185,7 @@ export type IHistoricalEvent = {
 export type IHistoricalQuoteEnhanced = {
   __typename?: 'IHistoricalQuoteEnhanced';
   actualClose?: Maybe<Scalars['Float']>;
+  adxShort?: Maybe<IAdx>;
   aroon5?: Maybe<IAroonStat>;
   aroon20?: Maybe<IAroonStat>;
   aroon50?: Maybe<IAroonStat>;
@@ -231,6 +245,7 @@ export type IStrategyTrade = {
   close?: Maybe<Scalars['Float']>;
   date?: Maybe<Scalars['String']>;
   relatedTrade?: Maybe<Array<Maybe<IStrategyTrade>>>;
+  risk?: Maybe<Scalars['Float']>;
   symbol?: Maybe<Scalars['String']>;
   type?: Maybe<TradeType>;
 };
@@ -355,9 +370,7 @@ export type Query = {
   __typename?: 'Query';
   allSecurities?: Maybe<Array<Maybe<Security>>>;
   allWatchlists?: Maybe<Array<Maybe<Watchlist>>>;
-  analyzeStrategy?: Maybe<Array<Maybe<IStrategyTrade>>>;
-  analyzeStrategyForStock?: Maybe<Array<Maybe<IStrategyTrade>>>;
-  analyzeStrategyForStockNew?: Maybe<Array<Maybe<IStrategyTrade>>>;
+  analyzeStrategyForStockNew?: Maybe<AnalyzeResponse>;
   analyzeStrategyNew?: Maybe<Array<Maybe<IStrategyTrade>>>;
   checkConnection?: Maybe<TestResponse>;
   deleteHistoricalEvents?: Maybe<SuccessResponse>;
@@ -380,12 +393,6 @@ export type Query = {
   transactions: Array<Maybe<Transaction>>;
   transactionsAggregate: TrxAggregate;
   updateTransactionSymbol?: Maybe<SuccessResponse>;
-};
-
-
-export type QueryAnalyzeStrategyForStockArgs = {
-  remote?: InputMaybe<Scalars['Boolean']>;
-  symbol: Scalars['String'];
 };
 
 
@@ -664,6 +671,18 @@ export type WatchlistEntry = {
   symbol?: Maybe<Scalars['String']>;
 };
 
+export type AnalyzeStrategyForStockNewQueryVariables = Exact<{
+  symbol: Scalars['String'];
+}>;
+
+
+export type AnalyzeStrategyForStockNewQuery = { __typename?: 'Query', analyzeStrategyForStockNew?: { __typename?: 'AnalyzeResponse', trades?: Array<{ __typename?: 'IStrategyTrade', symbol?: string | null, type?: TradeType | null, date?: string | null, close?: number | null, risk?: number | null, relatedTrade?: Array<{ __typename?: 'IStrategyTrade', type?: TradeType | null, close?: number | null, date?: string | null, symbol?: string | null } | null> | null } | null> | null, quotes?: Array<{ __typename?: 'IHistoricalQuoteEnhanced', date?: string | null, close?: number | null, atrTrade?: { __typename?: 'IAtrTrade', stopLoss?: number | null } | null } | null> | null } | null };
+
+export type GetAlgoTradesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAlgoTradesQuery = { __typename?: 'Query', getAlgoTrades?: Array<{ __typename?: 'IStrategyTrade', close?: number | null, date?: string | null, symbol?: string | null, type?: TradeType | null, risk?: number | null, relatedTrade?: Array<{ __typename?: 'IStrategyTrade', type?: TradeType | null, date?: string | null, close?: number | null, symbol?: string | null } | null> | null } | null> | null };
+
 export type PortfoliosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -690,6 +709,104 @@ export type TransactionsAggregateQueryVariables = Exact<{
 export type TransactionsAggregateQuery = { __typename?: 'Query', transactionsAggregate: { __typename?: 'TrxAggregate', statement: Array<{ __typename?: 'StatementEntry', _id: string, symbol: string, assetType: AssetType, trxType: string, date: string, amount: number, balance?: number | null, comment?: string | null, portfolio?: { __typename?: 'Portfolio', _id?: string | null, name?: string | null } | null, security?: { __typename?: 'Equity', name: string } | { __typename?: 'Fund', name: string } | { __typename?: 'Index', name: string } | null } | null>, holdings: Array<{ __typename?: 'StockTransactions', symbol: string, assetType: string, qty: number, costPrice?: number | null, profitLossBooked?: number | null, valueAtCostPrice?: number | null, currentPrice?: number | null, valueAtCurrentPrice?: number | null, date?: string | null, currentPnL?: number | null, stock?: { __typename?: 'Equity', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Fund', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Index', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | null } | null>, cash: { __typename?: 'Cash', cashIn: number, cashOut: number, currentCash: number } }, cashTransactions: Array<{ __typename?: 'Transaction', _id: string, date: string, amount: number, trxType: string } | null> };
 
 
+export const AnalyzeStrategyForStockNewDocument = gql`
+    query AnalyzeStrategyForStockNew($symbol: String!) {
+  analyzeStrategyForStockNew(symbol: $symbol) {
+    trades {
+      symbol
+      type
+      date
+      close
+      risk
+      relatedTrade {
+        type
+        close
+        date
+        symbol
+      }
+    }
+    quotes {
+      date
+      close
+      atrTrade {
+        stopLoss
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useAnalyzeStrategyForStockNewQuery__
+ *
+ * To run a query within a React component, call `useAnalyzeStrategyForStockNewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAnalyzeStrategyForStockNewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAnalyzeStrategyForStockNewQuery({
+ *   variables: {
+ *      symbol: // value for 'symbol'
+ *   },
+ * });
+ */
+export function useAnalyzeStrategyForStockNewQuery(baseOptions: Apollo.QueryHookOptions<AnalyzeStrategyForStockNewQuery, AnalyzeStrategyForStockNewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AnalyzeStrategyForStockNewQuery, AnalyzeStrategyForStockNewQueryVariables>(AnalyzeStrategyForStockNewDocument, options);
+      }
+export function useAnalyzeStrategyForStockNewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AnalyzeStrategyForStockNewQuery, AnalyzeStrategyForStockNewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AnalyzeStrategyForStockNewQuery, AnalyzeStrategyForStockNewQueryVariables>(AnalyzeStrategyForStockNewDocument, options);
+        }
+export type AnalyzeStrategyForStockNewQueryHookResult = ReturnType<typeof useAnalyzeStrategyForStockNewQuery>;
+export type AnalyzeStrategyForStockNewLazyQueryHookResult = ReturnType<typeof useAnalyzeStrategyForStockNewLazyQuery>;
+export type AnalyzeStrategyForStockNewQueryResult = Apollo.QueryResult<AnalyzeStrategyForStockNewQuery, AnalyzeStrategyForStockNewQueryVariables>;
+export const GetAlgoTradesDocument = gql`
+    query GetAlgoTrades {
+  getAlgoTrades {
+    close
+    date
+    symbol
+    type
+    relatedTrade {
+      type
+      date
+      close
+      symbol
+    }
+    risk
+  }
+}
+    `;
+
+/**
+ * __useGetAlgoTradesQuery__
+ *
+ * To run a query within a React component, call `useGetAlgoTradesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAlgoTradesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAlgoTradesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAlgoTradesQuery(baseOptions?: Apollo.QueryHookOptions<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>(GetAlgoTradesDocument, options);
+      }
+export function useGetAlgoTradesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>(GetAlgoTradesDocument, options);
+        }
+export type GetAlgoTradesQueryHookResult = ReturnType<typeof useGetAlgoTradesQuery>;
+export type GetAlgoTradesLazyQueryHookResult = ReturnType<typeof useGetAlgoTradesLazyQuery>;
+export type GetAlgoTradesQueryResult = Apollo.QueryResult<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>;
 export const PortfoliosDocument = gql`
     query Portfolios {
   portfolios {

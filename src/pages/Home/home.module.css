@@ -1,0 +1,8 @@
+.positive {
+    background-color: var(--chakra-colors-green-300);
+}
+
+.negative {
+    background-color: var(--chakra-colors-red-400);
+}
+

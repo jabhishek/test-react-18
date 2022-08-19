@@ -36,7 +36,8 @@ export const PriceCellRenderer = (props: ICellRendererParams) => {
     </Box>
   );
 };
-export const LiveQuoteCellRenderer = (
+
+export const LiveQuoteChangeCellRenderer = (
   props: ICellRendererParams & {
     addLiveQuote: (symbol: string, quote: number) => void;
   },
@@ -56,7 +57,7 @@ export const LiveQuoteCellRenderer = (
 
   useEffect(() => {
     if (quote?.liveQuote?.close && data?.symbol) {
-      props?.addLiveQuote(data?.symbol, quote?.liveQuote?.close);
+      props?.addLiveQuote?.(data?.symbol, quote?.liveQuote?.close);
     }
   }, [data?.symbol, props, quote?.liveQuote?.close]);
 
@@ -67,6 +68,30 @@ export const LiveQuoteCellRenderer = (
         {formatNumberWithComma(quote?.liveQuote?.close ?? '-')}
       </Box>
       <Box>{formatNumberWithComma(quote?.liveQuote?.previousClose ?? '-')}</Box>
+    </Box>
+  );
+};
+
+export const LiveQuoteCellRenderer = (props: ICellRendererParams) => {
+  const { data } = props as {
+    data: NonNullable<
+      NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['holdings']
+    >[number];
+  };
+
+  const { data: quote } = useGetLiveQuoteQuery({
+    variables: {
+      symbol: data?.symbol as string,
+    },
+    skip: !data?.symbol,
+  });
+
+  const isProfit = (quote?.liveQuote?.close ?? 0) >= (quote?.liveQuote?.previousClose ?? 0);
+  return (
+    <Box sx={{ lineHeight: 1.3, display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
+      <Box color={isProfit ? 'green.400' : 'red.400'}>
+        {formatNumberWithComma(quote?.liveQuote?.close ?? '-')}
+      </Box>
     </Box>
   );
 };

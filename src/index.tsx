@@ -7,6 +7,9 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { createApolloClient } from './createApolloClient';
 import { ApolloProvider } from '@apollo/client';
 
+import 'highcharts/css/stocktools/gui.css';
+import 'highcharts/css/annotations/popup.css';
+
 const apolloClient = createApolloClient();
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);

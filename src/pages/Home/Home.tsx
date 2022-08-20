@@ -23,32 +23,42 @@ const Home = () => {
     ?.map((x) => {
       return {
         symbol: x?.symbol,
+        name: x?.security?.name,
         date: x?.date,
         close: x?.close,
         sellDate: x?.relatedTrade?.[0]?.date,
         sellPrice: x?.relatedTrade?.[0]?.close,
         isProfit: (x?.relatedTrade?.[0]?.close ?? 0) > (x?.close ?? 0),
+        country: x?.security?.country,
+        daysSinceEma200Increasing: x?.daysSinceEma200Increasing,
+        weightedATR: x?.weightedATR,
+        watchlists: x?.security?.watchlists
+          ?.map((x) => x?.name)
+          .filter((x: string | undefined) => typeof x === 'string')
+          ?.join(', '),
+        portfolios: x?.security?.portfolios
+          ?.map((x) => x?.pf?.name)
+          .filter((x: string | null | undefined) => typeof x === 'string')
+          ?.join(', '),
       };
     })
     /*?.filter((x) => !x.isProfit)*/
     ?.sort((a, b) => {
-      const sellDateA = a?.sellDate as string;
-      const sellDateB = b?.sellDate as string;
       const buyDateA = a?.date as string;
       const buyDateB = b?.date as string;
-      if (!sellDateA) {
-        return buyDateA > buyDateB ? -1 : 1;
-      }
-      if (sellDateA > sellDateB) {
-        return -1;
-      }
-      return 1;
+      return buyDateA > buyDateB ? -1 : 1;
     });
   console.log('algo trades', trades);
 
   const columnDefs: ColDef[] = [
     {
       field: 'symbol',
+      minWidth: 300,
+      resizable: true,
+      cellClass: `${styles.flex}`,
+    },
+    {
+      field: 'country',
       minWidth: 300,
       resizable: true,
       cellClass: `${styles.flex}`,
@@ -63,6 +73,23 @@ const Home = () => {
     {
       headerName: 'Buy price',
       field: 'close',
+      minWidth: 100,
+      resizable: true,
+      cellClass: `${styles.flex} ${styles.justifyRight}`,
+      headerClass: `ag-right-aligned-header`,
+      valueFormatter: ({ value }) => {
+        return formatNumberWithComma(value, 2);
+      },
+    },
+    {
+      field: 'daysSinceEma200Increasing',
+      minWidth: 100,
+      resizable: true,
+      cellClass: `${styles.flex} ${styles.justifyRight}`,
+      headerClass: `ag-right-aligned-header`,
+    },
+    {
+      field: 'weightedATR',
       minWidth: 100,
       resizable: true,
       cellClass: `${styles.flex} ${styles.justifyRight}`,

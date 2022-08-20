@@ -242,12 +242,17 @@ export type IPossibleTrade = {
 
 export type IStrategyTrade = {
   __typename?: 'IStrategyTrade';
+  atr?: Maybe<Scalars['Float']>;
   close?: Maybe<Scalars['Float']>;
   date?: Maybe<Scalars['String']>;
+  daysSinceAboveEma200?: Maybe<Scalars['Int']>;
+  daysSinceEma200Increasing?: Maybe<Scalars['Int']>;
   relatedTrade?: Maybe<Array<Maybe<IStrategyTrade>>>;
   risk?: Maybe<Scalars['Float']>;
+  security?: Maybe<Security>;
   symbol?: Maybe<Scalars['String']>;
   type?: Maybe<TradeType>;
+  weightedATR?: Maybe<Scalars['Float']>;
 };
 
 export type ITrade = {
@@ -428,6 +433,11 @@ export type QueryEvaluateTechDataForStockArgs = {
 export type QueryExtractQuotesArgs = {
   legacySymbol?: InputMaybe<Scalars['String']>;
   newSymbol?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryGetAlgoTradesArgs = {
+  symbol?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -676,12 +686,12 @@ export type AnalyzeStrategyForStockNewQueryVariables = Exact<{
 }>;
 
 
-export type AnalyzeStrategyForStockNewQuery = { __typename?: 'Query', analyzeStrategyForStockNew?: { __typename?: 'AnalyzeResponse', trades?: Array<{ __typename?: 'IStrategyTrade', symbol?: string | null, type?: TradeType | null, date?: string | null, close?: number | null, risk?: number | null, relatedTrade?: Array<{ __typename?: 'IStrategyTrade', type?: TradeType | null, close?: number | null, date?: string | null, symbol?: string | null } | null> | null } | null> | null, quotes?: Array<{ __typename?: 'IHistoricalQuoteEnhanced', date?: string | null, close?: number | null, atrTrade?: { __typename?: 'IAtrTrade', stopLoss?: number | null } | null } | null> | null } | null };
+export type AnalyzeStrategyForStockNewQuery = { __typename?: 'Query', analyzeStrategyForStockNew?: { __typename?: 'AnalyzeResponse', trades?: Array<{ __typename?: 'IStrategyTrade', symbol?: string | null, type?: TradeType | null, date?: string | null, close?: number | null, risk?: number | null, relatedTrade?: Array<{ __typename?: 'IStrategyTrade', type?: TradeType | null, close?: number | null, date?: string | null, symbol?: string | null } | null> | null, security?: { __typename?: 'Equity', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | { __typename?: 'Fund', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | { __typename?: 'Index', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | null } | null> | null, quotes?: Array<{ __typename?: 'IHistoricalQuoteEnhanced', date?: string | null, open?: number | null, high?: number | null, low?: number | null, close?: number | null, atrTrade?: { __typename?: 'IAtrTrade', stopLoss?: number | null } | null } | null> | null } | null };
 
 export type GetAlgoTradesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAlgoTradesQuery = { __typename?: 'Query', getAlgoTrades?: Array<{ __typename?: 'IStrategyTrade', close?: number | null, date?: string | null, symbol?: string | null, type?: TradeType | null, risk?: number | null, relatedTrade?: Array<{ __typename?: 'IStrategyTrade', type?: TradeType | null, date?: string | null, close?: number | null, symbol?: string | null } | null> | null } | null> | null };
+export type GetAlgoTradesQuery = { __typename?: 'Query', getAlgoTrades?: Array<{ __typename?: 'IStrategyTrade', close?: number | null, date?: string | null, symbol?: string | null, type?: TradeType | null, daysSinceEma200Increasing?: number | null, daysSinceAboveEma200?: number | null, atr?: number | null, weightedATR?: number | null, risk?: number | null, relatedTrade?: Array<{ __typename?: 'IStrategyTrade', type?: TradeType | null, date?: string | null, close?: number | null, symbol?: string | null } | null> | null, security?: { __typename?: 'Equity', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | { __typename?: 'Fund', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | { __typename?: 'Index', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | null } | null> | null };
 
 export type PortfoliosQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -724,9 +734,26 @@ export const AnalyzeStrategyForStockNewDocument = gql`
         date
         symbol
       }
+      security {
+        country
+        name
+        watchlists {
+          name
+        }
+        portfolios {
+          pf {
+            name
+            symbols
+          }
+          qty
+        }
+      }
     }
     quotes {
       date
+      open
+      high
+      low
       close
       atrTrade {
         stopLoss
@@ -770,6 +797,10 @@ export const GetAlgoTradesDocument = gql`
     date
     symbol
     type
+    daysSinceEma200Increasing
+    daysSinceAboveEma200
+    atr
+    weightedATR
     relatedTrade {
       type
       date
@@ -777,6 +808,20 @@ export const GetAlgoTradesDocument = gql`
       symbol
     }
     risk
+    security {
+      country
+      name
+      watchlists {
+        name
+      }
+      portfolios {
+        pf {
+          name
+          symbols
+        }
+        qty
+      }
+    }
   }
 }
     `;

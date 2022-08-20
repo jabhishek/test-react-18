@@ -15,9 +15,26 @@ export const AnalyzeTrades = gql`
           date
           symbol
         }
+        security {
+          country
+          name
+          watchlists {
+            name
+          }
+          portfolios {
+            pf {
+              name
+              symbols
+            }
+            qty
+          }
+        }
       }
       quotes {
         date
+        open
+        high
+        low
         close
         atrTrade {
           stopLoss
@@ -34,6 +51,10 @@ export const GetAlgoTrades = gql`
       date
       symbol
       type
+      daysSinceEma200Increasing
+      daysSinceAboveEma200
+      atr
+      weightedATR
       relatedTrade {
         type
         date
@@ -41,6 +62,20 @@ export const GetAlgoTrades = gql`
         symbol
       }
       risk
+      security {
+        country
+        name
+        watchlists {
+          name
+        }
+        portfolios {
+          pf {
+            name
+            symbols
+          }
+          qty
+        }
+      }
     }
   }
 `;

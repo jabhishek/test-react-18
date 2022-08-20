@@ -1,5 +1,4 @@
-import { useNavigate } from 'react-router-dom';
-import { Box } from '@chakra-ui/react';
+import { Box, Modal, ModalCloseButton, ModalContent, ModalOverlay } from '@chakra-ui/react';
 import { useGetAlgoTradesQuery } from '../../generated/graphql';
 import { AgGridReact } from '@ag-grid-community/react';
 import { AllCommunityModules } from '@ag-grid-community/all-modules';
@@ -12,10 +11,12 @@ import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
 import styles from '../../components/Grids/grids.module.css';
 import homeStyles from './home.module.css';
 import { RowStyle } from '@ag-grid-community/core/dist/cjs/es5/entities/gridOptions';
+import { useState } from 'react';
+import { AnalyzeSecurity } from '../../components/AnalyzeSecurity';
 
 const Home = () => {
+  const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null);
   const { data: algoTrades } = useGetAlgoTradesQuery();
-  const navigate = useNavigate();
 
   const trades = algoTrades?.getAlgoTrades
     ?.filter((x) => x?.type === 'buy')
@@ -118,8 +119,7 @@ const Home = () => {
           pagination={true}
           paginationPageSize={50}
           onRowClicked={({ data }) => {
-            console.log('args', data);
-            navigate(`/analyze/${data?.symbol}`);
+            setSelectedSymbol(data?.symbol);
           }}
           rowClassRules={{
             [`${homeStyles.positive}`]: () => true,
@@ -136,6 +136,18 @@ const Home = () => {
           }}
         />
       </div>
+      <Modal
+        isOpen={!!selectedSymbol}
+        onClose={() => setSelectedSymbol(null)}
+        isCentered
+        scrollBehavior={'inside'}
+        size={'full'}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <AnalyzeSecurity symbol={selectedSymbol as string} />
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };

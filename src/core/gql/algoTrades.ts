@@ -55,6 +55,7 @@ export const GetAlgoTrades = gql`
       daysSinceAboveEma200
       atr
       weightedATR
+      hasAnomaly
       relatedTrade {
         type
         date

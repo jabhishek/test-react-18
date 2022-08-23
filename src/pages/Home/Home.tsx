@@ -1,5 +1,11 @@
 import { Box, Modal, ModalCloseButton, ModalContent, ModalOverlay } from '@chakra-ui/react';
-import { useGetAlgoTradesQuery } from '../../generated/graphql';
+import {
+  GetAlgoTradesQuery,
+  GetLatestQuoteQuery,
+  useGetAlgoTradesQuery,
+  useGetLatestQuoteLazyQuery,
+} from '../../generated/graphql';
+import { IStrategyTrade } from '@pfmanager/types';
 import { AgGridReact } from '@ag-grid-community/react';
 import { AllCommunityModules } from '@ag-grid-community/all-modules';
 import { ColDef } from '@ag-grid-community/core';
@@ -11,16 +17,47 @@ import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
 import styles from '../../components/Grids/grids.module.css';
 import homeStyles from './home.module.css';
 import { RowStyle } from '@ag-grid-community/core/dist/cjs/es5/entities/gridOptions';
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnalyzeSecurity } from '../../components/AnalyzeSecurity';
+import { backTest } from './back-test';
 
 const Home = () => {
   const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null);
   const { data: algoTrades } = useGetAlgoTradesQuery();
 
+  const [doGetQuote] = useGetLatestQuoteLazyQuery();
+
+  const getQuote = useCallback(async (symbol: string): Promise<GetLatestQuoteQuery> => {
+    return new Promise((res) => {
+      doGetQuote({
+        variables: {
+          symbol,
+        },
+        onCompleted: (x) => {
+          res(x);
+        },
+      });
+    });
+  }, []);
+
+  const algoTrades2 = useMemo(() => {
+    return ([...(algoTrades?.getAlgoTrades ?? [])] as GetAlgoTradesQuery['getAlgoTrades'])
+      ?.filter((x) => !x?.hasAnomaly && x?.security?.country === 'India')
+      .sort((a, b) => {
+        const buyDateA = a?.date as string;
+        const buyDateB = b?.date as string;
+        return buyDateA < buyDateB ? -1 : 1;
+      });
+  }, [algoTrades?.getAlgoTrades]);
+
+  // const x = backTest(algoTrades2, getQuote);
+
+  //console.log('x', x);
+
   const trades = algoTrades?.getAlgoTrades
     ?.filter((x) => x?.type === 'buy')
     ?.map((x) => {
+      const profit = (x?.relatedTrade?.[0]?.close ?? 0) - (x?.close ?? 0);
       return {
         symbol: x?.symbol,
         name: x?.security?.name,
@@ -28,9 +65,11 @@ const Home = () => {
         close: x?.close,
         sellDate: x?.relatedTrade?.[0]?.date,
         sellPrice: x?.relatedTrade?.[0]?.close,
-        isProfit: (x?.relatedTrade?.[0]?.close ?? 0) > (x?.close ?? 0),
+        isProfit: profit > 0,
+        profitLossP: x?.relatedTrade ? (profit * 100) / (x?.close as number) : null,
         country: x?.security?.country,
         daysSinceEma200Increasing: x?.daysSinceEma200Increasing,
+        daysSinceAboveEma200: x?.daysSinceAboveEma200,
         weightedATR: x?.weightedATR,
         watchlists: x?.security?.watchlists
           ?.map((x) => x?.name)
@@ -40,6 +79,7 @@ const Home = () => {
           ?.map((x) => x?.pf?.name)
           .filter((x: string | null | undefined) => typeof x === 'string')
           ?.join(', '),
+        hasAnomaly: x?.hasAnomaly,
       };
     })
     /*?.filter((x) => !x.isProfit)*/
@@ -48,27 +88,50 @@ const Home = () => {
       const buyDateB = b?.date as string;
       return buyDateA > buyDateB ? -1 : 1;
     });
-  console.log('algo trades', trades);
 
   const columnDefs: ColDef[] = [
     {
       field: 'symbol',
+      resizable: true,
+      cellClass: `${styles.flex}`,
+    },
+    {
+      field: 'name',
+      minWidth: 300,
+      resizable: true,
+      cellClass: `${styles.flex}`,
+    },
+    {
+      field: 'hasAnomaly',
+      minWidth: 300,
+      resizable: true,
+      cellClass: `${styles.flex}`,
+    },
+    {
+      field: 'portfolios',
       minWidth: 300,
       resizable: true,
       cellClass: `${styles.flex}`,
     },
     {
       field: 'country',
-      minWidth: 300,
       resizable: true,
       cellClass: `${styles.flex}`,
     },
     {
       headerName: 'Buy date',
       field: 'date',
-      minWidth: 200,
       resizable: true,
       cellClass: `${styles.flex}`,
+    },
+    {
+      headerName: 'Profit / loss',
+      field: 'profitLossP',
+      resizable: true,
+      cellClass: `${styles.flex}`,
+      valueFormatter: ({ value }) => {
+        return value ? `${formatNumberWithComma(value, 2)}%` : '';
+      },
     },
     {
       headerName: 'Buy price',
@@ -87,6 +150,15 @@ const Home = () => {
       resizable: true,
       cellClass: `${styles.flex} ${styles.justifyRight}`,
       headerClass: `ag-right-aligned-header`,
+      filter: 'agNumberColumnFilter',
+    },
+    {
+      field: 'daysSinceAboveEma200',
+      minWidth: 100,
+      resizable: true,
+      cellClass: `${styles.flex} ${styles.justifyRight}`,
+      headerClass: `ag-right-aligned-header`,
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'weightedATR',
@@ -101,7 +173,7 @@ const Home = () => {
     {
       headerName: 'Sell date',
       field: 'sellDate',
-      minWidth: 200,
+      minWidth: 100,
       resizable: true,
       cellClass: `${styles.flex}`,
     },
@@ -119,13 +191,30 @@ const Home = () => {
     },
     {
       field: 'liveQuote',
-      minWidth: 150,
+      minWidth: 100,
       resizable: true,
       cellRenderer: LiveQuoteCellRenderer,
       cellClass: `${styles.flex} ${styles.justifyRight}`,
       headerClass: `ag-right-aligned-header`,
     },
   ];
+
+  useEffect(() => {
+    const algoTrades2 = (
+      [...(algoTrades?.getAlgoTrades ?? [])] as GetAlgoTradesQuery['getAlgoTrades']
+    )
+      ?.filter((x) => !x?.hasAnomaly)
+      .sort((a, b) => {
+        const buyDateA = a?.date as string;
+        const buyDateB = b?.date as string;
+        return buyDateA < buyDateB ? -1 : 1;
+      });
+    if (algoTrades2?.length) {
+      backTest(algoTrades2, getQuote).then((x) => {
+        console.log('backTest results', x);
+      });
+    }
+  }, [algoTrades?.getAlgoTrades]);
 
   return (
     <Box>
@@ -154,6 +243,9 @@ const Home = () => {
           getRowStyle={({ data }): RowStyle => {
             if (!data?.sellDate) {
               return {};
+            }
+            if (data?.hasAnomaly) {
+              return { background: 'var(--chakra-colors-blue-100)' };
             }
             if (data.isProfit) {
               return { background: 'var(--chakra-colors-green-50)' };

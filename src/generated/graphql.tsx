@@ -150,6 +150,8 @@ export type ICurrentStatus = {
   atr?: Maybe<IAtrTrade>;
   atrRisk?: Maybe<Scalars['Float']>;
   close?: Maybe<Scalars['Float']>;
+  daysSinceAboveEma200?: Maybe<Scalars['Int']>;
+  daysSinceEma200Increasing?: Maybe<Scalars['Int']>;
   donchian20?: Maybe<IDonchianStat>;
   donchian50?: Maybe<IDonchianStat>;
   donchian200?: Maybe<IDonchianStat>;
@@ -247,6 +249,7 @@ export type IStrategyTrade = {
   date?: Maybe<Scalars['String']>;
   daysSinceAboveEma200?: Maybe<Scalars['Int']>;
   daysSinceEma200Increasing?: Maybe<Scalars['Int']>;
+  hasAnomaly?: Maybe<Scalars['Boolean']>;
   relatedTrade?: Maybe<Array<Maybe<IStrategyTrade>>>;
   risk?: Maybe<Scalars['Float']>;
   security?: Maybe<Security>;
@@ -387,6 +390,7 @@ export type Query = {
   getAlgoTrades?: Maybe<Array<Maybe<IStrategyTrade>>>;
   getHistoricalEvents?: Maybe<Array<Maybe<IHistoricalEvent>>>;
   getHistoricalQuotesForStock?: Maybe<Array<Maybe<IHistoricalQuoteEod>>>;
+  getLatestQuote?: Maybe<IHistoricalQuoteEod>;
   getPortfoliosForUsers?: Maybe<SuccessResponse>;
   liveQuote?: Maybe<ILiveQuoteEod>;
   portfolios?: Maybe<Array<Maybe<Portfolio>>>;
@@ -452,6 +456,11 @@ export type QueryGetHistoricalEventsArgs = {
 export type QueryGetHistoricalQuotesForStockArgs = {
   interval?: InputMaybe<Scalars['String']>;
   symbol: Scalars['String'];
+};
+
+
+export type QueryGetLatestQuoteArgs = {
+  symbol?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -691,7 +700,14 @@ export type AnalyzeStrategyForStockNewQuery = { __typename?: 'Query', analyzeStr
 export type GetAlgoTradesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAlgoTradesQuery = { __typename?: 'Query', getAlgoTrades?: Array<{ __typename?: 'IStrategyTrade', close?: number | null, date?: string | null, symbol?: string | null, type?: TradeType | null, daysSinceEma200Increasing?: number | null, daysSinceAboveEma200?: number | null, atr?: number | null, weightedATR?: number | null, risk?: number | null, relatedTrade?: Array<{ __typename?: 'IStrategyTrade', type?: TradeType | null, date?: string | null, close?: number | null, symbol?: string | null } | null> | null, security?: { __typename?: 'Equity', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | { __typename?: 'Fund', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | { __typename?: 'Index', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | null } | null> | null };
+export type GetAlgoTradesQuery = { __typename?: 'Query', getAlgoTrades?: Array<{ __typename?: 'IStrategyTrade', close?: number | null, date?: string | null, symbol?: string | null, type?: TradeType | null, daysSinceEma200Increasing?: number | null, daysSinceAboveEma200?: number | null, atr?: number | null, weightedATR?: number | null, hasAnomaly?: boolean | null, risk?: number | null, relatedTrade?: Array<{ __typename?: 'IStrategyTrade', type?: TradeType | null, date?: string | null, close?: number | null, symbol?: string | null } | null> | null, security?: { __typename?: 'Equity', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | { __typename?: 'Fund', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | { __typename?: 'Index', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | null } | null> | null };
+
+export type GetLatestQuoteQueryVariables = Exact<{
+  symbol?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetLatestQuoteQuery = { __typename?: 'Query', getLatestQuote?: { __typename?: 'IHistoricalQuoteEod', close?: number | null } | null };
 
 export type PortfoliosQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -801,6 +817,7 @@ export const GetAlgoTradesDocument = gql`
     daysSinceAboveEma200
     atr
     weightedATR
+    hasAnomaly
     relatedTrade {
       type
       date
@@ -852,6 +869,41 @@ export function useGetAlgoTradesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetAlgoTradesQueryHookResult = ReturnType<typeof useGetAlgoTradesQuery>;
 export type GetAlgoTradesLazyQueryHookResult = ReturnType<typeof useGetAlgoTradesLazyQuery>;
 export type GetAlgoTradesQueryResult = Apollo.QueryResult<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>;
+export const GetLatestQuoteDocument = gql`
+    query getLatestQuote($symbol: String) {
+  getLatestQuote(symbol: $symbol) {
+    close
+  }
+}
+    `;
+
+/**
+ * __useGetLatestQuoteQuery__
+ *
+ * To run a query within a React component, call `useGetLatestQuoteQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLatestQuoteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLatestQuoteQuery({
+ *   variables: {
+ *      symbol: // value for 'symbol'
+ *   },
+ * });
+ */
+export function useGetLatestQuoteQuery(baseOptions?: Apollo.QueryHookOptions<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>(GetLatestQuoteDocument, options);
+      }
+export function useGetLatestQuoteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>(GetLatestQuoteDocument, options);
+        }
+export type GetLatestQuoteQueryHookResult = ReturnType<typeof useGetLatestQuoteQuery>;
+export type GetLatestQuoteLazyQueryHookResult = ReturnType<typeof useGetLatestQuoteLazyQuery>;
+export type GetLatestQuoteQueryResult = Apollo.QueryResult<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>;
 export const PortfoliosDocument = gql`
     query Portfolios {
   portfolios {

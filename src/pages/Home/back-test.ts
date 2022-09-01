@@ -2,12 +2,10 @@ import { XIRR, formatDate } from '@pfmanager/utils';
 import { GetAlgoTradesQuery, GetLatestQuoteQuery } from '../../generated/graphql';
 import pLimit from 'p-limit';
 
-const SEED_MONEY = 500000;
-const RISK_PERCENT = 0.02;
+const SEED_MONEY = 0;
 const BROKERAGE = 0.0;
-
-const MIN_TRANSACTION_AMOUNT = RISK_PERCENT * SEED_MONEY;
-
+const trxAmount = 100;
+const maxTrades = 1000;
 export type IBackTestTrade = {
   symbol: string;
   date: string;
@@ -28,10 +26,13 @@ export type IBackTestTrade = {
   };
 
   currentValue?: number;
-  profit?: number;
+  profitP?: number;
   profitAmount?: number;
   totalProfit?: number;
 };
+
+const values: number[] = [];
+const dates: string[] = [];
 
 export const backTest = async (
   triggers: GetAlgoTradesQuery['getAlgoTrades'],
@@ -44,7 +45,6 @@ export const backTest = async (
 }> => {
   let allTrades: Array<IBackTestTrade> = [];
   // let activeTrades: Array<IBackTestTrade> = [];
-  let balanceAmount = SEED_MONEY;
   let portfolioAmount = SEED_MONEY;
   let activeTradeCount = 0;
   //let closedTradeCount = 0;
@@ -53,16 +53,12 @@ export const backTest = async (
   triggers?.forEach((t: NonNullable<GetAlgoTradesQuery['getAlgoTrades']>[number]) => {
     const { type, close, symbol, date } = t ?? {};
     if (symbol && date && close && type) {
-      if (type === 'buy' && balanceAmount > MIN_TRANSACTION_AMOUNT) {
-        const maxTrxAmount = Math.max(
-          RISK_PERCENT * portfolioAmount,
-          (totalProfit + SEED_MONEY) * RISK_PERCENT,
-        );
+      if (type === 'buy' && activeTradeCount < maxTrades) {
         const price = (close ?? 0) * (1 + BROKERAGE);
-        const qty = Math.ceil(maxTrxAmount / price);
+        const qty = trxAmount / price;
 
-        const trxValue = qty * price;
-        balanceAmount = balanceAmount - trxValue;
+        values.push(-1 * trxAmount);
+        dates.push(date);
 
         activeTradeCount++;
 
@@ -70,9 +66,9 @@ export const backTest = async (
           symbol,
           price,
           qty,
-          amount: trxValue,
+          amount: trxAmount,
           date,
-          balanceAmount,
+          balanceAmount: 0,
           activeTrades: activeTradeCount,
           totalProfit,
         };
@@ -89,7 +85,9 @@ export const backTest = async (
 
           const price = close * (1 - BROKERAGE);
           const trxValue = price * qty;
-          balanceAmount = balanceAmount + trxValue;
+
+          values.push(trxValue);
+          dates.push(date);
 
           const profitAmount = trxValue - amount;
           const profitP = Math.round((profitAmount / amount) * 100);
@@ -114,13 +112,13 @@ export const backTest = async (
                 sellTrade: {
                   qty,
                   amount: trxValue,
-                  balanceAmount,
+                  balanceAmount: 0,
                   date,
                   price,
                   activeTrades: activeTradeCount,
                 },
-                profit: profitP,
-                profitAmount: profitAmount,
+                profitP,
+                profitAmount,
                 totalProfit,
               };
             }
@@ -166,18 +164,11 @@ export const backTest = async (
     return t;
   });
 
-  const pfValue = holdingsValue + balanceAmount;
+  const pfValue = holdingsValue;
   console.log('pfValue', pfValue);
-  console.log('balanceAmount', balanceAmount);
-
-  const values: number[] = [];
-  const dates: string[] = [];
 
   values.push(pfValue);
   dates.push(formatDate(new Date(), 'yyyy-MM-dd'));
-
-  values.push(-1 * SEED_MONEY);
-  dates.push(enhancedTrades?.[0]?.date as string);
 
   console.log('allTrades', allTrades);
 
@@ -192,5 +183,5 @@ export const backTest = async (
     console.log('error', err);
   }
 
-  return { backTestTrades: allTrades, holdingsValue, balanceAmount, xirr };
+  return { backTestTrades: allTrades, holdingsValue, balanceAmount: 0, xirr };
 };

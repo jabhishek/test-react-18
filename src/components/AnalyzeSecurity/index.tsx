@@ -95,7 +95,7 @@ export const AnalyzeSecurity = ({ symbol }: { symbol: string }) => {
   const options: Highcharts.Options = useMemo<Highcharts.Options>(() => {
     const { quotesCandles, volumeData, atrStopSeries } = seriesData;
 
-    const emaSeries: Array<SeriesOptionsType> = [500, 200].map((period) => {
+    const emaSeries: Array<SeriesOptionsType> = [9, 50, 100, 500, 200].map((period) => {
       return {
         id: `ema${period}`,
         type: 'ema',
@@ -146,19 +146,11 @@ export const AnalyzeSecurity = ({ symbol }: { symbol: string }) => {
       },
       yAxis: [
         {
-          height: '70%',
-        },
-        {
-          top: '70%',
-          height: '10%',
+          height: '80%',
         },
         {
           top: '80%',
-          height: '10%',
-        },
-        {
-          top: '90%',
-          height: '10%',
+          height: '20%',
         },
       ],
       plotOptions: {

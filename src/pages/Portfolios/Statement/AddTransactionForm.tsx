@@ -1,9 +1,8 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button, FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react';
+import { AddTransactionMutation } from '../../../generated/graphql';
 
-type IFormInput = {
-  name: string;
-};
+type IFormInput = AddTransactionMutation['addTransaction'];
 
 export const AddTransactionForm = () => {
   const {
@@ -19,18 +18,17 @@ export const AddTransactionForm = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl isInvalid={!!errors.name}>
-          <FormLabel htmlFor="name">First name</FormLabel>
+        <FormControl isInvalid={!!errors.symbol}>
+          <FormLabel htmlFor="name">Symbol</FormLabel>
           <Input
             id="name"
-            placeholder="name"
-            {...register('name', {
-              required: 'This is required',
-              minLength: { value: 4, message: 'Minimum length should be 4' },
+            placeholder="symbol"
+            {...register('symbol', {
+              required: 'Symbol is required',
             })}
           />
           <FormErrorMessage>
-            {errors?.name ? (errors?.name?.message as string | undefined) : ''}
+            {errors?.symbol ? (errors?.symbol?.message as string | undefined) : ''}
           </FormErrorMessage>
         </FormControl>
         <Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">

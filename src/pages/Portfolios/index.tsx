@@ -8,7 +8,7 @@ import { Box, Grid, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/r
 import { Select as ChakraSelect } from 'chakra-react-select';
 import { HoldingsSection } from './HoldingsSection';
 import { Option } from '../../models/Option';
-import { StatementsSection } from './StatementsSection';
+import { StatementsSection } from './Statement/StatementsSection';
 import { useLocalStorageState } from '@pfmanager/utils';
 
 const Portfolios = () => {

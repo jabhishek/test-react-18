@@ -5,12 +5,10 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerBody,
-  DrawerFooter,
   DrawerOverlay,
-  Input,
   Drawer,
 } from '@chakra-ui/react';
-import { TransactionsAggregateQuery } from '../../generated/graphql';
+import { TransactionsAggregateQuery } from '../../../generated/graphql';
 import { StatementGrid } from './StatementGrid';
 import { useRef, useState } from 'react';
 import { AddTransactionForm } from './AddTransactionForm';

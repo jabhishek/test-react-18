@@ -1,10 +1,21 @@
-import { Box } from '@chakra-ui/react';
-import { TransactionsAggregateQuery } from '../../generated/graphql';
+import {
+  Box,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+} from '@chakra-ui/react';
+import { StatementEntry, TransactionsAggregateQuery } from '../../../generated/graphql';
 import { ColDef } from '@ag-grid-community/core';
-import styles from '../../components/Grids/grids.module.css';
+import styles from '../../../components/Grids/grids.module.css';
 import { AgGridReact } from '@ag-grid-community/react';
 import { AllCommunityModules } from '@ag-grid-community/all-modules';
-import { formatNumberWithComma } from '../../components/Grids/cellRenderers';
+import { formatNumberWithComma } from '../../../components/Grids/cellRenderers';
+import { useState } from 'react';
+import { AddTransactionForm } from './AddTransactionForm';
+import { EditTransactionForm } from './EditTransactionForm';
 
 export const StatementGrid = ({
   statements,
@@ -13,6 +24,7 @@ export const StatementGrid = ({
     | NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['statement']
     | undefined;
 }) => {
+  const [selectedTransaction, setSelectedTransaction] = useState<StatementEntry | null>(null);
   const columnDefs: ColDef[] = [
     {
       field: '_id',
@@ -82,8 +94,25 @@ export const StatementGrid = ({
           pagination={true}
           paginationPageSize={50}
           singleClickEdit={true}
+          onRowClicked={({ data }) => {
+            setSelectedTransaction(data);
+          }}
         />
       </div>
+      <Drawer
+        isOpen={!!selectedTransaction}
+        placement="right"
+        onClose={() => setSelectedTransaction(null)}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Edit Transaction</DrawerHeader>
+
+          <DrawerBody>
+            <EditTransactionForm transaction={selectedTransaction as StatementEntry} />
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </Box>
   );
 };

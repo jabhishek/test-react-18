@@ -4,7 +4,7 @@ import { ColDef } from '@ag-grid-community/core';
 import { AllCommunityModules } from '@ag-grid-community/all-modules';
 import '@ag-grid-community/core/dist/styles/ag-grid.css';
 import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
-import styles from './grids.module.css';
+import styles from '../../components/Grids/grids.module.css';
 import { useMemo, useState, useTransition } from 'react';
 import {
   formatNumberWithComma,
@@ -12,7 +12,7 @@ import {
   PriceCellRenderer,
   SecurityNameCellRenderer,
   ValueCellRenderer,
-} from './cellRenderers';
+} from '../../components/Grids/cellRenderers';
 
 export const HoldingsGrid = ({
   holdings,
@@ -84,7 +84,7 @@ export const HoldingsGrid = ({
         return formatNumberWithComma(value * 100);
       },
     },
-    {
+    /*{
       field: 'liveQuote',
       minWidth: 150,
       resizable: true,
@@ -92,7 +92,7 @@ export const HoldingsGrid = ({
       cellRendererParams: { addLiveQuote },
       cellClass: `${styles.flex} ${styles.justifyRight}`,
       headerClass: `ag-right-aligned-header`,
-    },
+    },*/
     {
       field: 'currentPrice',
       minWidth: 150,

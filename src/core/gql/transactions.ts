@@ -12,6 +12,8 @@ export const GET_STATEMENT = gql`
         amount
         balance
         comment
+        qty
+
         portfolio {
           _id
           name
@@ -63,6 +65,26 @@ export const GET_STATEMENT = gql`
       date
       amount
       trxType
+    }
+  }
+`;
+
+export const ADD_TRANSACTION = gql`
+  mutation AddTransaction($input: TransactionInput!) {
+    addTransaction(input: $input) {
+      _id
+      pfId
+      user
+      symbol
+      date
+      comment
+      assetType
+      trxType
+      amount
+      qty
+      price
+      brokerage
+      trxValue
     }
   }
 `;

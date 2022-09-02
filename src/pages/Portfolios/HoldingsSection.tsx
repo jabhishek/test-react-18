@@ -1,6 +1,6 @@
 import { Box, Grid } from '@chakra-ui/react';
 import { TransactionsAggregateQuery } from '../../generated/graphql';
-import { HoldingsGrid } from '../../components/Grids/HoldingsGrid';
+import { HoldingsGrid } from './HoldingsGrid';
 import { useMemo, useState } from 'react';
 import { Select as ChakraSelect } from 'chakra-react-select';
 import { Option } from '../../models/Option';
@@ -45,6 +45,7 @@ export const HoldingsSection = ({
     [aggregate?.holdings, selectedHoldingFilter?.value],
   );
 
+  console.log('HoldingsSection render');
   return (
     <Box>
       <Grid templateColumns={'repeat(3, 1fr)'} pb={4} gridGap={2}>

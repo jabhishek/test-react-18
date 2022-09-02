@@ -2948,7 +2948,7 @@
   resolved "https://registry.yarnpkg.com/@pfmanager/types/-/types-0.5.1.tgz#e1b83e913d1d6b8e46f05cbc27d83fe4364820bb"
   integrity sha512-LxDhjBWw8YYzPRMIvB+x9TXZwNrpTkrsBmMZ+UXFghfXFflzv3llM8s1fyBuQECttN8+IIdN1YdEN6kB2a51lw==
 
-"@pfmanager/utils@^0.4.1":
+"@pfmanager/utils@0.4.1", "@pfmanager/utils@^0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@pfmanager/utils/-/utils-0.4.1.tgz#b3492f564f0ae7359fbe1cd2663125bd1fd847b1"
   integrity sha512-kVRA9Kr7wSFvLuWKXMqVDopg1xnkcMsa+Oz3k7SirKPXP6W84i/7M/VgqgBM7Wp6OlalXMd+7JiFkAjXnZZ3sQ==
@@ -10177,6 +10177,11 @@ react-focus-lock@^2.9.1:
     react-clientside-effect "^1.2.6"
     use-callback-ref "^1.3.0"
     use-sidecar "^1.1.2"
+
+react-hook-form@^7.34.2:
+  version "7.34.2"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.34.2.tgz#9ac6d1a309a7c4aaa369d1269357a70e9e9bf4de"
+  integrity sha512-1lYWbEqr0GW7HHUjMScXMidGvV0BE2RJV3ap2BL7G0EJirkqpccTaawbsvBO8GZaB3JjCeFBEbnEWI1P8ZoLRQ==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"

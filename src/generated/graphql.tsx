@@ -381,6 +381,7 @@ export type Query = {
   analyzeStrategyForStockNew?: Maybe<AnalyzeResponse>;
   analyzeStrategyNew?: Maybe<Array<Maybe<IStrategyTrade>>>;
   checkConnection?: Maybe<TestResponse>;
+  clearAlgoTrades?: Maybe<Array<Maybe<SuccessResponse>>>;
   deleteHistoricalEvents?: Maybe<SuccessResponse>;
   deleteHistoricalQuotes?: Maybe<SuccessResponse>;
   deleteHistoricalQuotesForStock?: Maybe<SuccessResponse>;
@@ -407,6 +408,12 @@ export type Query = {
 
 export type QueryAnalyzeStrategyForStockNewArgs = {
   symbol: Scalars['String'];
+};
+
+
+export type QueryAnalyzeStrategyNewArgs = {
+  fromIndex?: InputMaybe<Scalars['Int']>;
+  toIndex?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -732,7 +739,14 @@ export type TransactionsAggregateQueryVariables = Exact<{
 }>;
 
 
-export type TransactionsAggregateQuery = { __typename?: 'Query', transactionsAggregate: { __typename?: 'TrxAggregate', statement: Array<{ __typename?: 'StatementEntry', _id: string, symbol: string, assetType: AssetType, trxType: string, date: string, amount: number, balance?: number | null, comment?: string | null, portfolio?: { __typename?: 'Portfolio', _id?: string | null, name?: string | null } | null, security?: { __typename?: 'Equity', name: string } | { __typename?: 'Fund', name: string } | { __typename?: 'Index', name: string } | null } | null>, holdings: Array<{ __typename?: 'StockTransactions', symbol: string, assetType: string, qty: number, costPrice?: number | null, profitLossBooked?: number | null, valueAtCostPrice?: number | null, currentPrice?: number | null, valueAtCurrentPrice?: number | null, date?: string | null, currentPnL?: number | null, stock?: { __typename?: 'Equity', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Fund', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Index', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | null } | null>, cash: { __typename?: 'Cash', cashIn: number, cashOut: number, currentCash: number } }, cashTransactions: Array<{ __typename?: 'Transaction', _id: string, date: string, amount: number, trxType: string } | null> };
+export type TransactionsAggregateQuery = { __typename?: 'Query', transactionsAggregate: { __typename?: 'TrxAggregate', statement: Array<{ __typename?: 'StatementEntry', _id: string, symbol: string, assetType: AssetType, trxType: string, date: string, amount: number, balance?: number | null, comment?: string | null, qty?: number | null, portfolio?: { __typename?: 'Portfolio', _id?: string | null, name?: string | null } | null, security?: { __typename?: 'Equity', name: string } | { __typename?: 'Fund', name: string } | { __typename?: 'Index', name: string } | null } | null>, holdings: Array<{ __typename?: 'StockTransactions', symbol: string, assetType: string, qty: number, costPrice?: number | null, profitLossBooked?: number | null, valueAtCostPrice?: number | null, currentPrice?: number | null, valueAtCurrentPrice?: number | null, date?: string | null, currentPnL?: number | null, stock?: { __typename?: 'Equity', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Fund', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Index', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | null } | null>, cash: { __typename?: 'Cash', cashIn: number, cashOut: number, currentCash: number } }, cashTransactions: Array<{ __typename?: 'Transaction', _id: string, date: string, amount: number, trxType: string } | null> };
+
+export type AddTransactionMutationVariables = Exact<{
+  input: TransactionInput;
+}>;
+
+
+export type AddTransactionMutation = { __typename?: 'Mutation', addTransaction: { __typename?: 'Transaction', _id: string, pfId: string, user: string, symbol: string, date: string, comment?: string | null, assetType: AssetType, trxType: string, amount: number, qty?: number | null, price?: number | null, brokerage?: number | null, trxValue?: number | null } };
 
 
 export const AnalyzeStrategyForStockNewDocument = gql`
@@ -1044,6 +1058,7 @@ export const TransactionsAggregateDocument = gql`
       amount
       balance
       comment
+      qty
       portfolio {
         _id
         name
@@ -1125,3 +1140,48 @@ export function useTransactionsAggregateLazyQuery(baseOptions?: Apollo.LazyQuery
 export type TransactionsAggregateQueryHookResult = ReturnType<typeof useTransactionsAggregateQuery>;
 export type TransactionsAggregateLazyQueryHookResult = ReturnType<typeof useTransactionsAggregateLazyQuery>;
 export type TransactionsAggregateQueryResult = Apollo.QueryResult<TransactionsAggregateQuery, TransactionsAggregateQueryVariables>;
+export const AddTransactionDocument = gql`
+    mutation AddTransaction($input: TransactionInput!) {
+  addTransaction(input: $input) {
+    _id
+    pfId
+    user
+    symbol
+    date
+    comment
+    assetType
+    trxType
+    amount
+    qty
+    price
+    brokerage
+    trxValue
+  }
+}
+    `;
+export type AddTransactionMutationFn = Apollo.MutationFunction<AddTransactionMutation, AddTransactionMutationVariables>;
+
+/**
+ * __useAddTransactionMutation__
+ *
+ * To run a mutation, you first call `useAddTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addTransactionMutation, { data, loading, error }] = useAddTransactionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddTransactionMutation(baseOptions?: Apollo.MutationHookOptions<AddTransactionMutation, AddTransactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddTransactionMutation, AddTransactionMutationVariables>(AddTransactionDocument, options);
+      }
+export type AddTransactionMutationHookResult = ReturnType<typeof useAddTransactionMutation>;
+export type AddTransactionMutationResult = Apollo.MutationResult<AddTransactionMutation>;
+export type AddTransactionMutationOptions = Apollo.BaseMutationOptions<AddTransactionMutation, AddTransactionMutationVariables>;

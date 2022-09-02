@@ -3212,7 +3212,32 @@
           {
             "name": "analyzeStrategyNew",
             "description": null,
-            "args": [],
+            "args": [
+              {
+                "name": "fromIndex",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "toIndex",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
             "type": {
               "kind": "LIST",
               "name": null,
@@ -3233,6 +3258,22 @@
               "kind": "OBJECT",
               "name": "TestResponse",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "clearAlgoTrades",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "SuccessResponse",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null

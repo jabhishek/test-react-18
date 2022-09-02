@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   TransactionsAggregateQuery,
   usePortfoliosQuery,
@@ -8,9 +8,14 @@ import { Box, Grid, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/r
 import { Select as ChakraSelect } from 'chakra-react-select';
 import { HoldingsSection } from './HoldingsSection';
 import { Option } from '../../models/Option';
+import { StatementsSection } from './StatementsSection';
+import { useLocalStorageState } from '@pfmanager/utils';
 
 const Portfolios = () => {
-  const [selectedPortfolio, setSelectedPortfolio] = useState<Array<Option> | undefined>(undefined);
+  const [selectedPortfolio, setSelectedPortfolio] = useLocalStorageState<Array<Option> | undefined>(
+    'selected',
+    undefined,
+  );
   const { data, loading } = useTransactionsAggregateQuery({
     variables: {
       pfIds: selectedPortfolio?.map((x) => x.value)?.join(','),
@@ -62,7 +67,7 @@ const Portfolios = () => {
                   <HoldingsSection aggregate={latestData?.transactionsAggregate} />
                 </TabPanel>
                 <TabPanel>
-                  <p>Showing transactions for selected portfolios</p>
+                  <StatementsSection aggregate={latestData?.transactionsAggregate} />
                 </TabPanel>
                 <TabPanel>
                   <p>Showing charts here</p>

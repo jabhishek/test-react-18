@@ -96,24 +96,34 @@ export const LiveQuoteCellRenderer = (props: ICellRendererParams) => {
   );
 };
 
-export const ValueCellRenderer = memo((props: ICellRendererParams) => {
-  const { data } = props as {
-    data: NonNullable<
-      NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['holdings']
-    >[number];
-  };
-  const isProfit = (data?.valueAtCurrentPrice ?? 0) > (data?.valueAtCostPrice ?? 0);
-  console.log('ValueCellRenderer');
+export const ValueCellRenderer = memo(
+  (props: ICellRendererParams) => {
+    const { data } = props as {
+      data: NonNullable<
+        NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['holdings']
+      >[number];
+    };
+    const isProfit = (data?.valueAtCurrentPrice ?? 0) > (data?.valueAtCostPrice ?? 0);
+    console.log('ValueCellRenderer');
 
-  return (
-    <Box sx={{ lineHeight: 1.3, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-      <Box color={isProfit ? 'green.400' : 'red.400'}>
-        {formatNumberWithComma(data?.valueAtCurrentPrice ?? 0)}
+    return (
+      <Box
+        sx={{ lineHeight: 1.3, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+        <Box color={isProfit ? 'green.400' : 'red.400'}>
+          {formatNumberWithComma(data?.valueAtCurrentPrice ?? 0)}
+        </Box>
+        <Box>{formatNumberWithComma(data?.valueAtCostPrice ?? 0)}</Box>
       </Box>
-      <Box>{formatNumberWithComma(data?.valueAtCostPrice ?? 0)}</Box>
-    </Box>
-  );
-});
+    );
+  },
+  ({ data }, { data: previousData }) => {
+    if (data?.valueAtCurrentPrice !== previousData?.valueAtCurrentPrice) {
+      console.log('data?.valueAtCurrentPrice', data?.valueAtCurrentPrice);
+      console.log('previousData?.valueAtCurrentPrice', previousData?.valueAtCurrentPrice);
+    }
+    return data?.valueAtCurrentPrice === previousData?.valueAtCurrentPrice;
+  },
+);
 
 export const DividendCellRenderer = (
   props: ICellRendererParams & {

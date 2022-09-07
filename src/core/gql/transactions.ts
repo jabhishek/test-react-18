@@ -88,3 +88,11 @@ export const ADD_TRANSACTION = gql`
     }
   }
 `;
+
+export const EDIT_TRANSACTION = gql`
+  mutation EditTransaction($editTransactionInput2: EditTransactionInput!) {
+    editTransaction(input: $editTransactionInput2) {
+      _id
+    }
+  }
+`;

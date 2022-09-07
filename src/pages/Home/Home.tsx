@@ -53,8 +53,9 @@ const Home = () => {
   const { data: algoTrades } = useGetAlgoTradesQuery();
 
   const filteredTrades = useMemo(() => {
-    return algoTrades?.getAlgoTrades?.filter((x) => {
-      return x?.security?.country === 'UK';
+    return algoTrades?.getAlgoTrades?.filter(() => {
+      //return x?.security?.country === 'UK';
+      return true;
     });
   }, [algoTrades?.getAlgoTrades]);
 

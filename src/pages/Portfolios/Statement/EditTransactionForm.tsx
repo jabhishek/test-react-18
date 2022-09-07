@@ -1,10 +1,16 @@
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react';
-import { StatementEntry } from '../../../generated/graphql';
+import { StatementEntry, useEditTransactionMutation } from '../../../generated/graphql';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type IFormInput = Pick<StatementEntry, '_id' | 'date'>;
 
-export const EditTransactionForm = ({ transaction }: { transaction: StatementEntry }) => {
+export const EditTransactionForm = ({
+  transaction,
+  onSave,
+}: {
+  transaction: StatementEntry;
+  onSave: () => void;
+}) => {
   const {
     handleSubmit,
     register,
@@ -13,8 +19,23 @@ export const EditTransactionForm = ({ transaction }: { transaction: StatementEnt
     defaultValues: transaction,
   });
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    console.log(data);
+  const [doEditTransaction, { loading, data }] = useEditTransactionMutation();
+
+  console.log('loading, data', loading, data);
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    await doEditTransaction({
+      variables: {
+        editTransactionInput2: {
+          _id: data._id,
+          date: data.date,
+        },
+      },
+      onCompleted: (response) => {
+        onSave();
+        console.log('response', response);
+      },
+    });
   };
 
   return (
@@ -33,7 +54,7 @@ export const EditTransactionForm = ({ transaction }: { transaction: StatementEnt
             {errors?.date ? (errors?.date?.message as string | undefined) : ''}
           </FormErrorMessage>
         </FormControl>
-        <Button mt={8} colorScheme="teal" isLoading={isSubmitting} type="submit">
+        <Button mt={8} colorScheme="teal" isLoading={isSubmitting} type="submit" disabled={loading}>
           Submit
         </Button>
       </form>

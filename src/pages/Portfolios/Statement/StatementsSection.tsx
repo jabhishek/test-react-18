@@ -15,8 +15,10 @@ import { AddTransactionForm } from './AddTransactionForm';
 
 export const StatementsSection = ({
   aggregate,
+  refetchAggregate,
 }: {
   aggregate: TransactionsAggregateQuery['transactionsAggregate'] | undefined;
+  refetchAggregate: () => void;
 }) => {
   const [showAddTransactionModal, setShowAddTransactionModal] = useState<boolean>(false);
   const btnRef = useRef<HTMLButtonElement | null>(null);
@@ -34,7 +36,7 @@ export const StatementsSection = ({
         </Button>
       </Box>
 
-      <StatementGrid statements={statements} />
+      <StatementGrid statements={statements} refetchAggregate={refetchAggregate} />
 
       <Drawer
         isOpen={showAddTransactionModal}

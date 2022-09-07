@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   TransactionsAggregateQuery,
   usePortfoliosQuery,
@@ -16,7 +16,11 @@ const Portfolios = () => {
     'selected',
     undefined,
   );
-  const { data, loading } = useTransactionsAggregateQuery({
+  const {
+    data,
+    loading,
+    refetch: refetchAggregate,
+  } = useTransactionsAggregateQuery({
     variables: {
       pfIds: selectedPortfolio?.map((x) => x.value)?.join(','),
     },
@@ -67,7 +71,10 @@ const Portfolios = () => {
                   <HoldingsSection aggregate={latestData?.transactionsAggregate} />
                 </TabPanel>
                 <TabPanel>
-                  <StatementsSection aggregate={latestData?.transactionsAggregate} />
+                  <StatementsSection
+                    aggregate={latestData?.transactionsAggregate}
+                    refetchAggregate={() => refetchAggregate()}
+                  />
                 </TabPanel>
                 <TabPanel>
                   <p>Showing charts here</p>

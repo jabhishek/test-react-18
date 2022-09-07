@@ -14,12 +14,13 @@ import { AgGridReact } from '@ag-grid-community/react';
 import { AllCommunityModules } from '@ag-grid-community/all-modules';
 import { formatNumberWithComma } from '../../../components/Grids/cellRenderers';
 import { useState } from 'react';
-import { AddTransactionForm } from './AddTransactionForm';
 import { EditTransactionForm } from './EditTransactionForm';
 
 export const StatementGrid = ({
   statements,
+  refetchAggregate,
 }: {
+  refetchAggregate: () => void;
   statements:
     | NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['statement']
     | undefined;
@@ -29,17 +30,10 @@ export const StatementGrid = ({
     {
       field: '_id',
       cellClass: `${styles.flex}`,
+      hide: true,
     },
     {
       field: 'symbol',
-      cellClass: `${styles.flex}`,
-    },
-    {
-      field: 'security.name',
-      cellClass: `${styles.flex}`,
-    },
-    {
-      field: 'portfolio.name',
       cellClass: `${styles.flex}`,
     },
     {
@@ -73,6 +67,14 @@ export const StatementGrid = ({
       valueFormatter: ({ value }) => {
         return formatNumberWithComma(value);
       },
+    },
+    {
+      field: 'security.name',
+      cellClass: `${styles.flex}`,
+    },
+    {
+      field: 'portfolio.name',
+      cellClass: `${styles.flex}`,
     },
   ];
   return (
@@ -109,7 +111,13 @@ export const StatementGrid = ({
           <DrawerHeader>Edit Transaction</DrawerHeader>
 
           <DrawerBody>
-            <EditTransactionForm transaction={selectedTransaction as StatementEntry} />
+            <EditTransactionForm
+              transaction={selectedTransaction as StatementEntry}
+              onSave={() => {
+                setSelectedTransaction(null);
+                refetchAggregate();
+              }}
+            />
           </DrawerBody>
         </DrawerContent>
       </Drawer>

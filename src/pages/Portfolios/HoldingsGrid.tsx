@@ -84,7 +84,7 @@ export const HoldingsGrid = ({
         return formatNumberWithComma(value * 100);
       },
     },
-    /*{
+    {
       field: 'liveQuote',
       minWidth: 150,
       resizable: true,
@@ -92,7 +92,7 @@ export const HoldingsGrid = ({
       cellRendererParams: { addLiveQuote },
       cellClass: `${styles.flex} ${styles.justifyRight}`,
       headerClass: `ag-right-aligned-header`,
-    },*/
+    },
     {
       field: 'currentPrice',
       minWidth: 150,

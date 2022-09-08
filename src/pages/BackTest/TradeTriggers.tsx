@@ -5,7 +5,7 @@ import { AgGridReact } from '@ag-grid-community/react';
 import { ColDef } from '@ag-grid-community/core';
 import styles from '../../components/Grids/grids.module.css';
 import { formatNumberWithComma, LiveQuoteCellRenderer } from '../../components/Grids/cellRenderers';
-import { DatesRenderer, PriceRenderer, SecurityNameCellRenderer } from './Home';
+import { DatesRenderer, PriceRenderer, SecurityNameCellRenderer } from './index';
 import { GetAlgoTradesQuery } from '../../generated/graphql';
 import { Dispatch, SetStateAction } from 'react';
 

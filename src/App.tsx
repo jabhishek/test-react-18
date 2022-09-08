@@ -4,7 +4,7 @@ import { Spinner } from '@chakra-ui/react';
 import { AppHeader } from './components/AppHeader';
 import Analyze from './components/AnalyzeSecurity';
 
-const LazyHome = React.lazy(() => import('./pages/Home/Home'));
+const LazyBackTest = React.lazy(() => import('./pages/BackTest'));
 const LazyPortfolios = React.lazy(() => import('./pages/Portfolios/index'));
 
 function App() {
@@ -14,10 +14,10 @@ function App() {
         <AppHeader />
         <Routes>
           <Route
-            path="/"
+            path="/back-test"
             element={
               <React.Suspense fallback={<Spinner />}>
-                <LazyHome />
+                <LazyBackTest />
               </React.Suspense>
             }
           />

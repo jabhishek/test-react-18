@@ -2,7 +2,7 @@ import { Box, Heading } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { Dispatch, SetStateAction, useState } from 'react';
 
-type ITabs = 'home' | 'events' | 'portfolios';
+type ITabs = 'home' | 'events' | 'portfolios' | 'back-test';
 
 const Tab = ({
   routeName,
@@ -42,6 +42,13 @@ export const AppHeader = () => {
           routeName={'home'}
           to={'/'}
           label={'Home'}
+        />
+        <Tab
+          selectedRoute={selectedRoute}
+          setSelectedRoute={setSelectedRoute}
+          routeName={'back-test'}
+          to={'/back-test'}
+          label={'Back Test'}
         />
         <Tab
           selectedRoute={selectedRoute}

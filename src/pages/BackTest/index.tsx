@@ -3,9 +3,6 @@ import { useGetAlgoTradesQuery } from '../../generated/graphql';
 import { ICellRendererParams } from '@ag-grid-community/core';
 import { formatNumberWithComma } from '../../components/Grids/cellRenderers';
 
-import '@ag-grid-community/core/dist/styles/ag-grid.css';
-import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
-
 import { useMemo, useState } from 'react';
 import { AnalyzeSecurity } from '../../components/AnalyzeSecurity';
 import { TradeTriggers } from './TradeTriggers';

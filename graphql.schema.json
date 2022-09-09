@@ -1377,6 +1377,30 @@
             "deprecationReason": null
           },
           {
+            "name": "daysSinceEma20Increasing",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "daysSinceEma50Increasing",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "daysSinceEma200Increasing",
             "description": null,
             "args": [],

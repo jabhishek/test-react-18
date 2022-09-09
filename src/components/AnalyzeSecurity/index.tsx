@@ -95,7 +95,7 @@ export const AnalyzeSecurity = ({ symbol }: { symbol: string }) => {
   const options: Highcharts.Options = useMemo<Highcharts.Options>(() => {
     const { quotesCandles, volumeData, atrStopSeries } = seriesData;
 
-    const emaSeries: Array<SeriesOptionsType> = [9, 50, 100, 500, 200].map((period) => {
+    const emaSeries: Array<SeriesOptionsType> = [50, 200, 500].map((period) => {
       return {
         id: `ema${period}`,
         type: 'ema',
@@ -167,7 +167,7 @@ export const AnalyzeSecurity = ({ symbol }: { symbol: string }) => {
         },
       },
       rangeSelector: {
-        selected: 4,
+        selected: 3,
         buttons: getRangeSelector(),
       },
 

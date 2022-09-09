@@ -3,30 +3,28 @@ import { gql } from '@apollo/client';
 export const AllSecurities = gql`
   query AllSecurities {
     allSecurities {
-      _id
-      country
       currentStatus {
+        daysSinceEma200Increasing
+        daysSinceEma50Increasing
+        daysSinceEma20Increasing
         aroon200Strategy {
-          date
-        }
-        aroon20Strategy {
-          type
-        }
-        aroon50Strategy {
           type
         }
       }
+      symbol
       name
+      country
+      watchlists {
+        name
+      }
       portfolios {
         pf {
           name
         }
+        qty
       }
-      symbol
+      lastQuoteUpdate
       type
-      watchlists {
-        name
-      }
     }
   }
 `;

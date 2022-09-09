@@ -161,6 +161,8 @@ export type ICurrentStatus = {
   atrRisk?: Maybe<Scalars['Float']>;
   close?: Maybe<Scalars['Float']>;
   daysSinceAboveEma200?: Maybe<Scalars['Int']>;
+  daysSinceEma20Increasing?: Maybe<Scalars['Int']>;
+  daysSinceEma50Increasing?: Maybe<Scalars['Int']>;
   daysSinceEma200Increasing?: Maybe<Scalars['Int']>;
   donchian20?: Maybe<IDonchianStat>;
   donchian50?: Maybe<IDonchianStat>;
@@ -740,7 +742,7 @@ export type PortfoliosQuery = { __typename?: 'Query', portfolios?: Array<{ __typ
 export type AllSecuritiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllSecuritiesQuery = { __typename?: 'Query', allSecurities?: Array<{ __typename?: 'Equity', _id: string, country?: string | null, name: string, symbol: string, type?: Type | null, currentStatus?: Array<{ __typename?: 'ICurrentStatus', aroon200Strategy?: { __typename?: 'IPossibleTrade', date?: string | null } | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', pf?: { __typename?: 'Portfolio', name?: string | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Fund', _id: string, country?: string | null, name: string, symbol: string, type?: Type | null, currentStatus?: Array<{ __typename?: 'ICurrentStatus', aroon200Strategy?: { __typename?: 'IPossibleTrade', date?: string | null } | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', pf?: { __typename?: 'Portfolio', name?: string | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Index', _id: string, country?: string | null, name: string, symbol: string, type?: Type | null, currentStatus?: Array<{ __typename?: 'ICurrentStatus', aroon200Strategy?: { __typename?: 'IPossibleTrade', date?: string | null } | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', pf?: { __typename?: 'Portfolio', name?: string | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | null> | null };
+export type AllSecuritiesQuery = { __typename?: 'Query', allSecurities?: Array<{ __typename?: 'Equity', symbol: string, name: string, country?: string | null, lastQuoteUpdate?: string | null, type?: Type | null, currentStatus?: Array<{ __typename?: 'ICurrentStatus', daysSinceEma200Increasing?: number | null, daysSinceEma50Increasing?: number | null, daysSinceEma20Increasing?: number | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null } | null } | null> | null } | { __typename?: 'Fund', symbol: string, name: string, country?: string | null, lastQuoteUpdate?: string | null, type?: Type | null, currentStatus?: Array<{ __typename?: 'ICurrentStatus', daysSinceEma200Increasing?: number | null, daysSinceEma50Increasing?: number | null, daysSinceEma20Increasing?: number | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null } | null } | null> | null } | { __typename?: 'Index', symbol: string, name: string, country?: string | null, lastQuoteUpdate?: string | null, type?: Type | null, currentStatus?: Array<{ __typename?: 'ICurrentStatus', daysSinceEma200Increasing?: number | null, daysSinceEma50Increasing?: number | null, daysSinceEma20Increasing?: number | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null } | null } | null> | null } | null> | null };
 
 export type GetLiveQuoteQueryVariables = Exact<{
   symbol: Scalars['String'];
@@ -979,30 +981,28 @@ export type PortfoliosQueryResult = Apollo.QueryResult<PortfoliosQuery, Portfoli
 export const AllSecuritiesDocument = gql`
     query AllSecurities {
   allSecurities {
-    _id
-    country
     currentStatus {
+      daysSinceEma200Increasing
+      daysSinceEma50Increasing
+      daysSinceEma20Increasing
       aroon200Strategy {
-        date
-      }
-      aroon20Strategy {
-        type
-      }
-      aroon50Strategy {
         type
       }
     }
+    symbol
     name
+    country
+    watchlists {
+      name
+    }
     portfolios {
       pf {
         name
       }
+      qty
     }
-    symbol
+    lastQuoteUpdate
     type
-    watchlists {
-      name
-    }
   }
 }
     `;

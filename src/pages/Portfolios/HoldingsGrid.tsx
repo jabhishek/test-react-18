@@ -2,8 +2,6 @@ import { TransactionsAggregateQuery } from '../../generated/graphql';
 import { AgGridReact } from '@ag-grid-community/react';
 import { ColDef } from '@ag-grid-community/core';
 import { AllCommunityModules } from '@ag-grid-community/all-modules';
-import '@ag-grid-community/core/dist/styles/ag-grid.css';
-import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
 import styles from '../../components/Grids/grids.module.css';
 import { useMemo, useState, useTransition } from 'react';
 import {

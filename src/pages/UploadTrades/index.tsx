@@ -1,13 +1,11 @@
 import { Box, Button } from '@chakra-ui/react';
-import { useMemo, useState } from 'react';
-
-import { IInputTransaction } from '@pfmanager/types';
+import { useState } from 'react';
 
 import Papa from 'papaparse';
 import { PortfolioSelect } from '../../components/SelectComponents/PortfolioSelect';
 import { useLocalStorageState } from '@pfmanager/utils';
 import { Option } from '../../models/Option';
-import { useAddTransactionMutation } from '../../generated/graphql';
+import { AssetType, TransactionInput, useAddTransactionsMutation } from '../../generated/graphql';
 
 type I212Transaction = {
   Action: 'Deposit' | 'Market buy';
@@ -33,10 +31,10 @@ const UploadTrades = () => {
     undefined,
   );
 
-  const [doAddTransaction, { data: addResult }] = useAddTransactionMutation();
+  const [doAddTransactions, { data: addResult }] = useAddTransactionsMutation();
 
   // This state will store the parsed data
-  const [data, setData] = useState<Array<I212Transaction>>([]);
+  const [data, setData] = useState<Array<TransactionInput>>([]);
 
   // It will store the file uploaded by the user
   const [file, setFile] = useState('');
@@ -55,6 +53,32 @@ const UploadTrades = () => {
     }
   };
 
+  const getTransactions = (data: Array<I212Transaction>) => {
+    const transactions: Array<TransactionInput> = [];
+
+    data.forEach((x) => {
+      const date = x?.Time?.substring(0, 10);
+      if (x?.Action === 'Deposit') {
+        const trx: TransactionInput = {
+          user: 'abhi2000@gmail.com',
+          date,
+          amount: parseFloat(x?.['Total (GBP)']),
+          trxType: 'cash-in',
+          assetType: AssetType.Cash,
+          pfId: selectedPortfolio?.[0]?.value as string,
+          symbol: 'CASH',
+          baseCurrency: 'GBP',
+          sourceTradeId: x?.ID,
+          comment: '',
+        };
+
+        transactions.push(trx);
+      }
+    });
+
+    return transactions;
+  };
+
   const handleParse = () => {
     // Initialize a reader which allows user
     // to read any file or blob.
@@ -67,43 +91,33 @@ const UploadTrades = () => {
         const csv = Papa.parse(target?.result as string, { header: true });
         const parsedData = csv?.data as Array<I212Transaction>;
 
-        console.log('parsed data', parsedData);
-
-        setData(parsedData);
+        setData(getTransactions(parsedData));
       }
     };
     // @ts-ignore
     reader.readAsText(file);
   };
 
-  console.log('data', data);
+  const handleUpload = async () => {
+    /*doAddTransactions({
+      variables: {
+        input: data ?? [],
+      },
+    });*/
 
-  const transactions = useMemo(() => {
-    const transactions: Array<IInputTransaction> = [];
+    if (data) {
+      await doAddTransactions({
+        variables: {
+          input: data,
+        },
+        onCompleted: () => {
+          console.log('uploaded');
+        },
+      });
+    }
+  };
 
-    data.forEach((x) => {
-      const date = x?.Time?.substring(0, 10);
-      if (x?.Action === 'Deposit') {
-        const trx: IInputTransaction = {
-          user: 'abhi2000@gmail.com',
-          date,
-          amount: parseFloat(x?.['Total (GBP)']),
-          trxType: 'cash-in',
-          assetType: 'cash',
-          pfId: selectedPortfolio?.[0]?.value,
-          symbol: 'CASH',
-          baseCurrency: 'GBP',
-          sourceTradeId: x?.ID,
-        };
-
-        transactions.push(trx);
-      }
-    });
-
-    return transactions;
-  }, [data, selectedPortfolio]);
-
-  console.log('transactions', transactions);
+  console.log('data', data, addResult);
 
   return (
     <Box>
@@ -118,6 +132,9 @@ const UploadTrades = () => {
       </Box>
       <Box p={4}>
         <Button onClick={handleParse}>Parse</Button>
+      </Box>
+      <Box p={4}>
+        <Button onClick={handleUpload}>Upload</Button>
       </Box>
     </Box>
   );

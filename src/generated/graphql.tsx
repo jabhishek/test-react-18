@@ -689,12 +689,16 @@ export type Transaction = {
 export type TransactionInput = {
   amount?: InputMaybe<Scalars['Float']>;
   assetType: AssetType;
+  baseCurrency?: InputMaybe<Scalars['String']>;
   brokerage?: InputMaybe<Scalars['Float']>;
   comment: Scalars['String'];
+  currency?: InputMaybe<Scalars['String']>;
   date: Scalars['String'];
+  exchangeRate?: InputMaybe<Scalars['Float']>;
   pfId: Scalars['String'];
   price?: InputMaybe<Scalars['Float']>;
   qty?: InputMaybe<Scalars['Float']>;
+  sourceTradeId?: InputMaybe<Scalars['String']>;
   symbol: Scalars['String'];
   trxType: Scalars['String'];
   user: Scalars['String'];

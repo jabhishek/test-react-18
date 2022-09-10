@@ -15,6 +15,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type AddPortfolioInput = {
+  name: Scalars['String'];
+  user: Scalars['String'];
+};
+
 export type AddSymbolToWatchlistInput = {
   symbol: Scalars['String'];
   watchlistId: Scalars['String'];
@@ -302,10 +307,12 @@ export enum Interval {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addPortfolio: SuccessResponse;
   addSecurity: Security;
   addStockSplit: Equity;
   addSymbolToWatchlist: Watchlist;
   addTransaction: Transaction;
+  addTransactions: SuccessResponse;
   addWatchlist: Watchlist;
   deleteWatchlist?: Maybe<Array<Maybe<Watchlist>>>;
   editTransaction?: Maybe<EditTransactionResponse>;
@@ -317,6 +324,11 @@ export type Mutation = {
   syncHistoricalQuotes?: Maybe<SuccessResponse>;
   syncHistoricalQuotesForStock?: Maybe<SuccessResponse>;
   updateQuote?: Maybe<SuccessResponse>;
+};
+
+
+export type MutationAddPortfolioArgs = {
+  input: AddPortfolioInput;
 };
 
 
@@ -337,6 +349,11 @@ export type MutationAddSymbolToWatchlistArgs = {
 
 export type MutationAddTransactionArgs = {
   input: TransactionInput;
+};
+
+
+export type MutationAddTransactionsArgs = {
+  input: Array<InputMaybe<TransactionInput>>;
 };
 
 
@@ -765,6 +782,13 @@ export type AddTransactionMutationVariables = Exact<{
 
 
 export type AddTransactionMutation = { __typename?: 'Mutation', addTransaction: { __typename?: 'Transaction', _id: string, pfId: string, user: string, symbol: string, date: string, comment?: string | null, assetType: AssetType, trxType: string, amount: number, qty?: number | null, price?: number | null, brokerage?: number | null, trxValue?: number | null } };
+
+export type AddTransactionsMutationVariables = Exact<{
+  input: Array<InputMaybe<TransactionInput>> | InputMaybe<TransactionInput>;
+}>;
+
+
+export type AddTransactionsMutation = { __typename?: 'Mutation', addTransactions: { __typename?: 'SuccessResponse', success?: boolean | null } };
 
 export type EditTransactionMutationVariables = Exact<{
   editTransactionInput2: EditTransactionInput;
@@ -1208,6 +1232,39 @@ export function useAddTransactionMutation(baseOptions?: Apollo.MutationHookOptio
 export type AddTransactionMutationHookResult = ReturnType<typeof useAddTransactionMutation>;
 export type AddTransactionMutationResult = Apollo.MutationResult<AddTransactionMutation>;
 export type AddTransactionMutationOptions = Apollo.BaseMutationOptions<AddTransactionMutation, AddTransactionMutationVariables>;
+export const AddTransactionsDocument = gql`
+    mutation AddTransactions($input: [TransactionInput]!) {
+  addTransactions(input: $input) {
+    success
+  }
+}
+    `;
+export type AddTransactionsMutationFn = Apollo.MutationFunction<AddTransactionsMutation, AddTransactionsMutationVariables>;
+
+/**
+ * __useAddTransactionsMutation__
+ *
+ * To run a mutation, you first call `useAddTransactionsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddTransactionsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addTransactionsMutation, { data, loading, error }] = useAddTransactionsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddTransactionsMutation(baseOptions?: Apollo.MutationHookOptions<AddTransactionsMutation, AddTransactionsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddTransactionsMutation, AddTransactionsMutationVariables>(AddTransactionsDocument, options);
+      }
+export type AddTransactionsMutationHookResult = ReturnType<typeof useAddTransactionsMutation>;
+export type AddTransactionsMutationResult = Apollo.MutationResult<AddTransactionsMutation>;
+export type AddTransactionsMutationOptions = Apollo.BaseMutationOptions<AddTransactionsMutation, AddTransactionsMutationVariables>;
 export const EditTransactionDocument = gql`
     mutation EditTransaction($editTransactionInput2: EditTransactionInput!) {
   editTransaction(input: $editTransactionInput2) {

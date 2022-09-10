@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react';
-import {
-  TransactionsAggregateQuery,
-  usePortfoliosQuery,
-  useTransactionsAggregateQuery,
-} from '../../generated/graphql';
+import { TransactionsAggregateQuery, useTransactionsAggregateQuery } from '../../generated/graphql';
 import { Box, Grid, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
-import { Select as ChakraSelect } from 'chakra-react-select';
 import { HoldingsSection } from './HoldingsSection';
 import { Option } from '../../models/Option';
 import { StatementsSection } from './Statement/StatementsSection';
 import { useLocalStorageState } from '@pfmanager/utils';
+import { PortfolioSelect } from '../../components/SelectComponents/PortfolioSelect';
 
 const Portfolios = () => {
   const [selectedPortfolio, setSelectedPortfolio] = useLocalStorageState<Array<Option> | undefined>(
@@ -38,24 +34,13 @@ const Portfolios = () => {
     }
   }, [data, selectedPortfolio]);
 
-  const { data: portfolios } = usePortfoliosQuery();
-
-  const pfOptions = portfolios?.portfolios?.map((x) => ({
-    value: x?._id ?? '',
-    label: x?.name ?? '',
-  }));
-
   return (
     <div>
       <Box p={4}>
         <Grid templateColumns={'repeat(3, 1fr)'} pb={4} gridGap={2}>
-          <ChakraSelect<Option, true>
-            isMulti
-            options={pfOptions}
-            value={selectedPortfolio}
-            onChange={(value) => {
-              setSelectedPortfolio([...value]);
-            }}
+          <PortfolioSelect
+            selectedPortfolio={selectedPortfolio}
+            setSelectedPortfolio={setSelectedPortfolio}
           />
         </Grid>
         {selectedPortfolio ? (

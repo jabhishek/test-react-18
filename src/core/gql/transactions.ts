@@ -89,6 +89,14 @@ export const ADD_TRANSACTION = gql`
   }
 `;
 
+export const ADD_TRANSACTIONS = gql`
+  mutation AddTransactions($input: [TransactionInput]!) {
+    addTransactions(input: $input) {
+      success
+    }
+  }
+`;
+
 export const EDIT_TRANSACTION = gql`
   mutation EditTransaction($editTransactionInput2: EditTransactionInput!) {
     editTransaction(input: $editTransactionInput2) {

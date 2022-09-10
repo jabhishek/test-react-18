@@ -6,6 +6,7 @@ import '@ag-grid-community/core/dist/styles/ag-theme-alpine.css';
 import { Spinner } from '@chakra-ui/react';
 import { AppHeader } from './components/AppHeader';
 import Analyze from './components/AnalyzeSecurity';
+import UploadTrades from './pages/UploadTrades';
 
 const LazyHome = React.lazy(() => import('./pages/Home'));
 const LazyBackTest = React.lazy(() => import('./pages/BackTest'));
@@ -41,6 +42,7 @@ function App() {
               </React.Suspense>
             }
           />
+          <Route path="/upload" element={<UploadTrades />} />
           <Route path="/analyze/:id" element={<Analyze />} />
         </Routes>
       </BrowserRouter>

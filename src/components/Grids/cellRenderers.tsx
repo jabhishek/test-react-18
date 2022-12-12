@@ -19,7 +19,9 @@ export const SecurityNameCellRenderer = (props: ICellRendererParams) => {
   return (
     <Box sx={{ lineHeight: 1.3 }}>
       <Box>{data?.stock?.name}</Box>
-      <Box>{data?.symbol}</Box>
+      <Box>
+        {data?.symbol} ({data?.currency})
+      </Box>
     </Box>
   );
 };
@@ -32,7 +34,7 @@ export const PriceCellRenderer = (props: ICellRendererParams) => {
   return (
     <Box sx={{ lineHeight: 1.3, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
       <Box>{formatNumberWithComma(data?.currentPrice ?? 0)}</Box>
-      <Box>{formatNumberWithComma(data?.costPrice ?? 0)}</Box>
+      <Box>{formatNumberWithComma(data?.currencyCostPrice ?? 0)}</Box>
     </Box>
   );
 };
@@ -104,7 +106,6 @@ export const ValueCellRenderer = memo(
       >[number];
     };
     const isProfit = (data?.valueAtCurrentPrice ?? 0) > (data?.valueAtCostPrice ?? 0);
-    console.log('ValueCellRenderer');
 
     return (
       <Box
@@ -118,8 +119,10 @@ export const ValueCellRenderer = memo(
   },
   ({ data }, { data: previousData }) => {
     if (data?.valueAtCurrentPrice !== previousData?.valueAtCurrentPrice) {
+      /*
       console.log('data?.valueAtCurrentPrice', data?.valueAtCurrentPrice);
       console.log('previousData?.valueAtCurrentPrice', previousData?.valueAtCurrentPrice);
+*/
     }
     return data?.valueAtCurrentPrice === previousData?.valueAtCurrentPrice;
   },

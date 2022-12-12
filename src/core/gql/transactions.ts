@@ -52,6 +52,10 @@ export const GET_STATEMENT = gql`
             name
           }
         }
+        currency
+        baseCurrency
+        currencyCostPrice
+        valueAtCurrencyCostPrice
       }
 
       cash {

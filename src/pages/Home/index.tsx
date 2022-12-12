@@ -7,8 +7,6 @@ import { AgGridReact } from '@ag-grid-community/react';
 import { AllCommunityModules } from '@ag-grid-community/all-modules';
 import { AnalyzeSecurity } from '../../components/AnalyzeSecurity';
 
-import { LiveQuoteCellRenderer } from '../../components/Grids/cellRenderers';
-
 import styles from '../../components/Grids/grids.module.css';
 
 const Securities = () => {
@@ -42,6 +40,7 @@ const Securities = () => {
       resizable: true,
       cellClass: `${styles.flex}`,
     },
+    /*
     {
       field: 'liveQuote',
       resizable: true,
@@ -49,6 +48,7 @@ const Securities = () => {
       cellClass: `${styles.flex} ${styles.justifyRight}`,
       headerClass: `ag-right-aligned-header`,
     },
+*/
     {
       field: 'country',
       resizable: true,

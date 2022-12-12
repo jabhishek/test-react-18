@@ -4,6 +4,7 @@ import { HoldingsGrid } from './HoldingsGrid';
 import { useMemo, useState } from 'react';
 import { Select as ChakraSelect } from 'chakra-react-select';
 import { Option } from '../../models/Option';
+import { formatNumberWithComma } from '../../components/Grids/cellRenderers';
 
 type IHoldingOption = 'all' | 'holdings' | 'no-holdings';
 
@@ -45,7 +46,19 @@ export const HoldingsSection = ({
     [aggregate?.holdings, selectedHoldingFilter?.value],
   );
 
-  console.log('HoldingsSection render');
+  const holdingsValue = useMemo(
+    () =>
+      holdings
+        ?.filter((x) => x?.qty && x.qty > 0)
+        ?.reduce((a, b) => {
+          return (b?.valueAtCurrentPrice ?? 0) + a;
+        }, 0) ?? 0,
+    [holdings],
+  );
+
+  const cash = aggregate?.cash?.currentCash ?? 0;
+
+  console.log('HoldingsSection render', aggregate?.cash?.currentCash);
   return (
     <Box>
       <Grid templateColumns={'repeat(3, 1fr)'} pb={4} gridGap={2}>
@@ -58,7 +71,16 @@ export const HoldingsSection = ({
         />
       </Grid>
 
-      {aggregate ? <HoldingsGrid holdings={holdings} statements={aggregate.statement} /> : null}
+      <Box>Cash: {formatNumberWithComma(cash)}</Box>
+
+      {aggregate ? (
+        <HoldingsGrid
+          holdings={holdings}
+          statements={aggregate.statement}
+          holdingsValue={holdingsValue}
+          cash={cash}
+        />
+      ) : null}
     </Box>
   );
 };

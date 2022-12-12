@@ -6,7 +6,6 @@ import styles from '../../components/Grids/grids.module.css';
 import { useMemo, useState, useTransition } from 'react';
 import {
   formatNumberWithComma,
-  LiveQuoteChangeCellRenderer,
   PriceCellRenderer,
   SecurityNameCellRenderer,
   ValueCellRenderer,
@@ -15,6 +14,8 @@ import {
 export const HoldingsGrid = ({
   holdings,
   statements,
+  cash,
+  holdingsValue,
 }: {
   statements:
     | NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['statement']
@@ -22,6 +23,8 @@ export const HoldingsGrid = ({
   holdings:
     | NonNullable<TransactionsAggregateQuery['transactionsAggregate']>['holdings']
     | undefined;
+  cash: number;
+  holdingsValue: number;
 }) => {
   const [liveQuotes, setLiveQuotes] = useState<Map<string, number>>(new Map());
 
@@ -35,24 +38,21 @@ export const HoldingsGrid = ({
     }
   };
 
-  const holdingsValue = useMemo(
-    () =>
-      holdings
-        ?.filter((x) => x?.qty && x.qty > 0)
-        ?.reduce((a, b) => {
-          return (b?.valueAtCurrentPrice ?? 0) + a;
-        }, 0) ?? 0,
-    [holdings],
-  );
+  const pfValue = holdingsValue + (cash ?? 0);
+  console.log('pfValue', pfValue);
 
   const enhancedHoldings = useMemo(() => {
     return holdings?.map((x) => {
       return {
         ...x,
-        weightage: holdingsValue ? (x?.valueAtCurrentPrice ?? 0) / holdingsValue : 0,
+        weightage: pfValue ? (x?.valueAtCurrentPrice ?? 0) / pfValue : 0,
+        percentPnL:
+          x?.valueAtCostPrice && x?.valueAtCurrentPrice && x?.currentPnL
+            ? (x?.currentPnL * 100) / x?.valueAtCostPrice
+            : 0,
       };
     });
-  }, [holdings, holdingsValue]);
+  }, [holdings, pfValue]);
 
   const columnDefs: ColDef[] = [
     {
@@ -82,6 +82,7 @@ export const HoldingsGrid = ({
         return formatNumberWithComma(value * 100);
       },
     },
+    /*
     {
       field: 'liveQuote',
       minWidth: 150,
@@ -91,6 +92,7 @@ export const HoldingsGrid = ({
       cellClass: `${styles.flex} ${styles.justifyRight}`,
       headerClass: `ag-right-aligned-header`,
     },
+*/
     {
       field: 'currentPrice',
       minWidth: 150,
@@ -111,7 +113,7 @@ export const HoldingsGrid = ({
     {
       field: 'currentPnL',
       headerName: 'Current P&L',
-      minWidth: 150,
+      minWidth: 100,
       resizable: true,
       cellClass: `${styles.flex} ${styles.justifyRight}`,
       headerClass: `ag-right-aligned-header`,
@@ -120,6 +122,23 @@ export const HoldingsGrid = ({
       },
       valueFormatter: ({ value }) => {
         return formatNumberWithComma(value);
+      },
+      cellStyle: (params) => {
+        return {
+          color:
+            params.value > 0 ? 'var(--chakra-colors-green-400)' : 'var(--chakra-colors-red-400)',
+        };
+      },
+    },
+    {
+      field: 'percentPnL',
+      headerName: 'Percent P&L',
+      minWidth: 100,
+      resizable: true,
+      cellClass: `${styles.flex} ${styles.justifyRight}`,
+      headerClass: `ag-right-aligned-header`,
+      valueFormatter: ({ value }) => {
+        return `${formatNumberWithComma(value, 2)}%`;
       },
       cellStyle: (params) => {
         return {

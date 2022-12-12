@@ -4,7 +4,7 @@ import { RowStyle } from '@ag-grid-community/core/dist/cjs/es5/entities/gridOpti
 import { AgGridReact } from '@ag-grid-community/react';
 import { ColDef } from '@ag-grid-community/core';
 import styles from '../../components/Grids/grids.module.css';
-import { formatNumberWithComma, LiveQuoteCellRenderer } from '../../components/Grids/cellRenderers';
+import { formatNumberWithComma } from '../../components/Grids/cellRenderers';
 import { DatesRenderer, PriceRenderer, SecurityNameCellRenderer } from './index';
 import { GetAlgoTradesQuery } from '../../generated/graphql';
 import { Dispatch, SetStateAction } from 'react';
@@ -114,6 +114,7 @@ export const TradeTriggers = ({
       headerClass: `ag-right-aligned-header`,
       cellRenderer: PriceRenderer,
     },
+    /*
 
     {
       field: 'liveQuote',
@@ -122,6 +123,7 @@ export const TradeTriggers = ({
       cellClass: `${styles.flex} ${styles.justifyRight}`,
       headerClass: `ag-right-aligned-header`,
     },
+*/
     {
       headerName: 'EMA Increase days',
       field: 'daysSinceEma200Increasing',

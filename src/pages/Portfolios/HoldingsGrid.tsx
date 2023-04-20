@@ -54,6 +54,8 @@ export const HoldingsGrid = ({
     });
   }, [holdings, pfValue]);
 
+  console.log('enhancedHoldings', enhancedHoldings)
+
   const columnDefs: ColDef[] = [
     {
       field: 'stock.name',

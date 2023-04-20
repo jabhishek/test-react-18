@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -40,7 +39,7 @@ export type AnalyzeResponse = {
 export enum AssetType {
   Cash = 'cash',
   Fund = 'fund',
-  Stock = 'stock',
+  Stock = 'stock'
 }
 
 export type Cash = {
@@ -303,7 +302,7 @@ export type Index = Security & {
 export enum Interval {
   D = 'd',
   M = 'm',
-  W = 'w',
+  W = 'w'
 }
 
 export type Mutation = {
@@ -328,62 +327,82 @@ export type Mutation = {
   updateQuote?: Maybe<SuccessResponse>;
 };
 
+
 export type MutationAddPortfolioArgs = {
   input: AddPortfolioInput;
 };
+
 
 export type MutationAddSecurityArgs = {
   input: SecurityInput;
 };
 
+
 export type MutationAddStockSplitArgs = {
   input: StockSplitInput;
 };
+
 
 export type MutationAddSymbolToWatchlistArgs = {
   input: AddSymbolToWatchlistInput;
 };
 
+
 export type MutationAddTransactionArgs = {
   input: TransactionInput;
 };
+
 
 export type MutationAddTransactionsArgs = {
   input: Array<InputMaybe<TransactionInput>>;
 };
 
+
 export type MutationAddWatchlistArgs = {
   input: AddWatchlistInput;
 };
+
 
 export type MutationDeleteTransactionsArgs = {
   pfId: Scalars['String'];
 };
 
+
 export type MutationDeleteWatchlistArgs = {
   input: DeleteWatchlistInput;
 };
+
 
 export type MutationEditTransactionArgs = {
   input: EditTransactionInput;
 };
 
+
 export type MutationRemoveSymbolFromWatchlistArgs = {
   input: RemoveSymbolFromWatchlistInput;
 };
+
 
 export type MutationSyncCurrentStatusForStockArgs = {
   symbol: Scalars['String'];
 };
 
+
 export type MutationSyncHistoricalEventsForStockArgs = {
   symbol: Scalars['String'];
 };
+
+
+export type MutationSyncHistoricalQuotesArgs = {
+  clearBeforeSync?: InputMaybe<Scalars['Boolean']>;
+};
+
 
 export type MutationSyncHistoricalQuotesForStockArgs = {
   clearBeforeSync?: InputMaybe<Scalars['Boolean']>;
   symbol: Scalars['String'];
 };
+
 
 export type MutationUpdateQuoteArgs = {
   close?: InputMaybe<Scalars['Float']>;
@@ -432,28 +451,34 @@ export type Query = {
   updateTransactionSymbol?: Maybe<SuccessResponse>;
 };
 
+
 export type QueryAnalyzeStrategyForStockNewArgs = {
   symbol: Scalars['String'];
 };
+
 
 export type QueryAnalyzeStrategyNewArgs = {
   fromIndex?: InputMaybe<Scalars['Int']>;
   toIndex?: InputMaybe<Scalars['Int']>;
 };
 
+
 export type QueryDeleteHistoricalEventsArgs = {
   interval?: InputMaybe<Scalars['String']>;
   symbol?: InputMaybe<Scalars['String']>;
 };
+
 
 export type QueryDeleteHistoricalQuotesForStockArgs = {
   interval?: InputMaybe<Scalars['String']>;
   symbol: Scalars['String'];
 };
 
+
 export type QueryDeleteSecurityArgs = {
   symbol: Scalars['String'];
 };
+
 
 export type QueryEvaluateTechDataForStockArgs = {
   fromDb?: InputMaybe<Scalars['Boolean']>;
@@ -461,14 +486,17 @@ export type QueryEvaluateTechDataForStockArgs = {
   symbol: Scalars['String'];
 };
 
+
 export type QueryExtractQuotesArgs = {
   legacySymbol?: InputMaybe<Scalars['String']>;
   newSymbol?: InputMaybe<Scalars['String']>;
 };
 
+
 export type QueryGetAlgoTradesArgs = {
   symbol?: InputMaybe<Scalars['String']>;
 };
+
 
 export type QueryGetHistoricalEventsArgs = {
   eventTypes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -477,34 +505,42 @@ export type QueryGetHistoricalEventsArgs = {
   symbol?: InputMaybe<Scalars['String']>;
 };
 
+
 export type QueryGetHistoricalQuotesForStockArgs = {
   interval?: InputMaybe<Scalars['String']>;
   symbol: Scalars['String'];
 };
 
+
 export type QueryGetLatestQuoteArgs = {
   symbol?: InputMaybe<Scalars['String']>;
 };
+
 
 export type QueryLiveQuoteArgs = {
   symbol: Scalars['String'];
 };
 
+
 export type QueryResetQuoteDateArgs = {
   date?: InputMaybe<Scalars['String']>;
 };
+
 
 export type QuerySearchSecurityArgs = {
   text?: InputMaybe<Scalars['String']>;
 };
 
+
 export type QuerySecurityArgs = {
   symbol: Scalars['String'];
 };
 
+
 export type QuerySetHistoricalPortfolioStatesArgs = {
   pfIds: Array<InputMaybe<Scalars['String']>>;
 };
+
 
 export type QueryTransactionsArgs = {
   assetType?: InputMaybe<Scalars['String']>;
@@ -515,6 +551,7 @@ export type QueryTransactionsArgs = {
   transactionTypes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
+
 export type QueryTransactionsAggregateArgs = {
   assetType?: InputMaybe<Scalars['String']>;
   dateTo?: InputMaybe<Scalars['String']>;
@@ -523,6 +560,7 @@ export type QueryTransactionsAggregateArgs = {
   transactionType?: InputMaybe<Scalars['String']>;
   transactionTypes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 export type QueryUpdateTransactionSymbolArgs = {
   newSymbol?: InputMaybe<Scalars['String']>;
@@ -642,7 +680,7 @@ export type TestResponse = {
 
 export enum TradeType {
   Buy = 'buy',
-  Sell = 'sell',
+  Sell = 'sell'
 }
 
 export type Transaction = {
@@ -689,6 +727,7 @@ export type TrxAggregate = {
   transactions: Array<Maybe<Transaction>>;
 };
 
+
 export type TrxAggregateHoldingsArgs = {
   date?: InputMaybe<Scalars['String']>;
 };
@@ -696,7 +735,7 @@ export type TrxAggregateHoldingsArgs = {
 export enum Type {
   Equity = 'equity',
   Fund = 'fund',
-  Index = 'index',
+  Index = 'index'
 }
 
 export type Watchlist = {
@@ -716,440 +755,111 @@ export type AnalyzeStrategyForStockNewQueryVariables = Exact<{
   symbol: Scalars['String'];
 }>;
 
-export type AnalyzeStrategyForStockNewQuery = {
-  __typename?: 'Query';
-  analyzeStrategyForStockNew?: {
-    __typename?: 'AnalyzeResponse';
-    trades?: Array<{
-      __typename?: 'IStrategyTrade';
-      symbol?: string | null;
-      type?: TradeType | null;
-      date?: string | null;
-      close?: number | null;
-      risk?: number | null;
-      relatedTrade?: Array<{
-        __typename?: 'IStrategyTrade';
-        type?: TradeType | null;
-        close?: number | null;
-        date?: string | null;
-        symbol?: string | null;
-      } | null> | null;
-      security?:
-        | {
-            __typename?: 'Equity';
-            country?: string | null;
-            name: string;
-            watchlists?: Array<{ __typename?: 'Watchlist'; name: string } | null> | null;
-            portfolios?: Array<{
-              __typename?: 'SecurityPortfolio';
-              qty?: number | null;
-              pf?: {
-                __typename?: 'Portfolio';
-                name?: string | null;
-                symbols?: Array<string | null> | null;
-              } | null;
-            } | null> | null;
-          }
-        | {
-            __typename?: 'Fund';
-            country?: string | null;
-            name: string;
-            watchlists?: Array<{ __typename?: 'Watchlist'; name: string } | null> | null;
-            portfolios?: Array<{
-              __typename?: 'SecurityPortfolio';
-              qty?: number | null;
-              pf?: {
-                __typename?: 'Portfolio';
-                name?: string | null;
-                symbols?: Array<string | null> | null;
-              } | null;
-            } | null> | null;
-          }
-        | {
-            __typename?: 'Index';
-            country?: string | null;
-            name: string;
-            watchlists?: Array<{ __typename?: 'Watchlist'; name: string } | null> | null;
-            portfolios?: Array<{
-              __typename?: 'SecurityPortfolio';
-              qty?: number | null;
-              pf?: {
-                __typename?: 'Portfolio';
-                name?: string | null;
-                symbols?: Array<string | null> | null;
-              } | null;
-            } | null> | null;
-          }
-        | null;
-    } | null> | null;
-    quotes?: Array<{
-      __typename?: 'IHistoricalQuoteEnhanced';
-      date?: string | null;
-      open?: number | null;
-      high?: number | null;
-      low?: number | null;
-      close?: number | null;
-      atrTrade?: { __typename?: 'IAtrTrade'; stopLoss?: number | null } | null;
-    } | null> | null;
-  } | null;
-};
 
-export type GetAlgoTradesQueryVariables = Exact<{ [key: string]: never }>;
+export type AnalyzeStrategyForStockNewQuery = { __typename?: 'Query', analyzeStrategyForStockNew?: { __typename?: 'AnalyzeResponse', trades?: Array<{ __typename?: 'IStrategyTrade', symbol?: string | null, type?: TradeType | null, date?: string | null, close?: number | null, risk?: number | null, relatedTrade?: Array<{ __typename?: 'IStrategyTrade', type?: TradeType | null, close?: number | null, date?: string | null, symbol?: string | null } | null> | null, security?: { __typename?: 'Equity', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | { __typename?: 'Fund', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | { __typename?: 'Index', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | null } | null> | null, quotes?: Array<{ __typename?: 'IHistoricalQuoteEnhanced', date?: string | null, open?: number | null, high?: number | null, low?: number | null, close?: number | null, atrTrade?: { __typename?: 'IAtrTrade', stopLoss?: number | null } | null } | null> | null } | null };
 
-export type GetAlgoTradesQuery = {
-  __typename?: 'Query';
-  getAlgoTrades?: Array<{
-    __typename?: 'IStrategyTrade';
-    close?: number | null;
-    date?: string | null;
-    symbol?: string | null;
-    type?: TradeType | null;
-    daysSinceEma200Increasing?: number | null;
-    daysSinceAboveEma200?: number | null;
-    atr?: number | null;
-    weightedATR?: number | null;
-    hasAnomaly?: boolean | null;
-    risk?: number | null;
-    relatedTrade?: Array<{
-      __typename?: 'IStrategyTrade';
-      type?: TradeType | null;
-      date?: string | null;
-      close?: number | null;
-      symbol?: string | null;
-    } | null> | null;
-    security?:
-      | {
-          __typename?: 'Equity';
-          country?: string | null;
-          name: string;
-          watchlists?: Array<{ __typename?: 'Watchlist'; name: string } | null> | null;
-          portfolios?: Array<{
-            __typename?: 'SecurityPortfolio';
-            qty?: number | null;
-            pf?: {
-              __typename?: 'Portfolio';
-              name?: string | null;
-              symbols?: Array<string | null> | null;
-            } | null;
-          } | null> | null;
-        }
-      | {
-          __typename?: 'Fund';
-          country?: string | null;
-          name: string;
-          watchlists?: Array<{ __typename?: 'Watchlist'; name: string } | null> | null;
-          portfolios?: Array<{
-            __typename?: 'SecurityPortfolio';
-            qty?: number | null;
-            pf?: {
-              __typename?: 'Portfolio';
-              name?: string | null;
-              symbols?: Array<string | null> | null;
-            } | null;
-          } | null> | null;
-        }
-      | {
-          __typename?: 'Index';
-          country?: string | null;
-          name: string;
-          watchlists?: Array<{ __typename?: 'Watchlist'; name: string } | null> | null;
-          portfolios?: Array<{
-            __typename?: 'SecurityPortfolio';
-            qty?: number | null;
-            pf?: {
-              __typename?: 'Portfolio';
-              name?: string | null;
-              symbols?: Array<string | null> | null;
-            } | null;
-          } | null> | null;
-        }
-      | null;
-  } | null> | null;
-};
+export type GetAlgoTradesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAlgoTradesQuery = { __typename?: 'Query', getAlgoTrades?: Array<{ __typename?: 'IStrategyTrade', close?: number | null, date?: string | null, symbol?: string | null, type?: TradeType | null, daysSinceEma200Increasing?: number | null, daysSinceAboveEma200?: number | null, atr?: number | null, weightedATR?: number | null, hasAnomaly?: boolean | null, risk?: number | null, relatedTrade?: Array<{ __typename?: 'IStrategyTrade', type?: TradeType | null, date?: string | null, close?: number | null, symbol?: string | null } | null> | null, security?: { __typename?: 'Equity', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | { __typename?: 'Fund', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | { __typename?: 'Index', country?: string | null, name: string, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null, symbols?: Array<string | null> | null } | null } | null> | null } | null } | null> | null };
 
 export type GetLatestQuoteQueryVariables = Exact<{
   symbol?: InputMaybe<Scalars['String']>;
 }>;
 
-export type GetLatestQuoteQuery = {
-  __typename?: 'Query';
-  getLatestQuote?: { __typename?: 'IHistoricalQuoteEod'; close?: number | null } | null;
-};
 
-export type PortfoliosQueryVariables = Exact<{ [key: string]: never }>;
+export type GetLatestQuoteQuery = { __typename?: 'Query', getLatestQuote?: { __typename?: 'IHistoricalQuoteEod', close?: number | null } | null };
 
-export type PortfoliosQuery = {
-  __typename?: 'Query';
-  portfolios?: Array<{
-    __typename?: 'Portfolio';
-    _id?: string | null;
-    name?: string | null;
-  } | null> | null;
-};
+export type PortfoliosQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type AllSecuritiesQueryVariables = Exact<{ [key: string]: never }>;
 
-export type AllSecuritiesQuery = {
-  __typename?: 'Query';
-  allSecurities?: Array<
-    | {
-        __typename?: 'Equity';
-        symbol: string;
-        name: string;
-        country?: string | null;
-        lastQuoteUpdate?: string | null;
-        type?: Type | null;
-        currentStatus?: Array<{
-          __typename?: 'ICurrentStatus';
-          daysSinceEma200Increasing?: number | null;
-          daysSinceEma50Increasing?: number | null;
-          daysSinceEma20Increasing?: number | null;
-          aroon200Strategy?: { __typename?: 'IPossibleTrade'; type?: TradeType | null } | null;
-        } | null> | null;
-        watchlists?: Array<{ __typename?: 'Watchlist'; name: string } | null> | null;
-        portfolios?: Array<{
-          __typename?: 'SecurityPortfolio';
-          qty?: number | null;
-          pf?: { __typename?: 'Portfolio'; name?: string | null } | null;
-        } | null> | null;
-      }
-    | {
-        __typename?: 'Fund';
-        symbol: string;
-        name: string;
-        country?: string | null;
-        lastQuoteUpdate?: string | null;
-        type?: Type | null;
-        currentStatus?: Array<{
-          __typename?: 'ICurrentStatus';
-          daysSinceEma200Increasing?: number | null;
-          daysSinceEma50Increasing?: number | null;
-          daysSinceEma20Increasing?: number | null;
-          aroon200Strategy?: { __typename?: 'IPossibleTrade'; type?: TradeType | null } | null;
-        } | null> | null;
-        watchlists?: Array<{ __typename?: 'Watchlist'; name: string } | null> | null;
-        portfolios?: Array<{
-          __typename?: 'SecurityPortfolio';
-          qty?: number | null;
-          pf?: { __typename?: 'Portfolio'; name?: string | null } | null;
-        } | null> | null;
-      }
-    | {
-        __typename?: 'Index';
-        symbol: string;
-        name: string;
-        country?: string | null;
-        lastQuoteUpdate?: string | null;
-        type?: Type | null;
-        currentStatus?: Array<{
-          __typename?: 'ICurrentStatus';
-          daysSinceEma200Increasing?: number | null;
-          daysSinceEma50Increasing?: number | null;
-          daysSinceEma20Increasing?: number | null;
-          aroon200Strategy?: { __typename?: 'IPossibleTrade'; type?: TradeType | null } | null;
-        } | null> | null;
-        watchlists?: Array<{ __typename?: 'Watchlist'; name: string } | null> | null;
-        portfolios?: Array<{
-          __typename?: 'SecurityPortfolio';
-          qty?: number | null;
-          pf?: { __typename?: 'Portfolio'; name?: string | null } | null;
-        } | null> | null;
-      }
-    | null
-  > | null;
-};
+export type PortfoliosQuery = { __typename?: 'Query', portfolios?: Array<{ __typename?: 'Portfolio', _id?: string | null, name?: string | null } | null> | null };
+
+export type AllSecuritiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllSecuritiesQuery = { __typename?: 'Query', allSecurities?: Array<{ __typename?: 'Equity', symbol: string, name: string, country?: string | null, exchange: string, lastQuoteUpdate?: string | null, type?: Type | null, currentStatus?: Array<{ __typename?: 'ICurrentStatus', daysSinceEma200Increasing?: number | null, daysSinceEma50Increasing?: number | null, daysSinceEma20Increasing?: number | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null } | null } | null> | null } | { __typename?: 'Fund', symbol: string, name: string, country?: string | null, exchange: string, lastQuoteUpdate?: string | null, type?: Type | null, currentStatus?: Array<{ __typename?: 'ICurrentStatus', daysSinceEma200Increasing?: number | null, daysSinceEma50Increasing?: number | null, daysSinceEma20Increasing?: number | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null } | null } | null> | null } | { __typename?: 'Index', symbol: string, name: string, country?: string | null, exchange: string, lastQuoteUpdate?: string | null, type?: Type | null, currentStatus?: Array<{ __typename?: 'ICurrentStatus', daysSinceEma200Increasing?: number | null, daysSinceEma50Increasing?: number | null, daysSinceEma20Increasing?: number | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null, portfolios?: Array<{ __typename?: 'SecurityPortfolio', qty?: number | null, pf?: { __typename?: 'Portfolio', name?: string | null } | null } | null> | null } | null> | null };
 
 export type GetLiveQuoteQueryVariables = Exact<{
   symbol: Scalars['String'];
 }>;
 
-export type GetLiveQuoteQuery = {
-  __typename?: 'Query';
-  liveQuote?: {
-    __typename?: 'ILiveQuoteEod';
-    close?: number | null;
-    previousClose?: number | null;
-  } | null;
-};
+
+export type GetLiveQuoteQuery = { __typename?: 'Query', liveQuote?: { __typename?: 'ILiveQuoteEod', close?: number | null, previousClose?: number | null } | null };
 
 export type TransactionsAggregateQueryVariables = Exact<{
   pfIds?: InputMaybe<Scalars['String']>;
   dateTo?: InputMaybe<Scalars['String']>;
 }>;
 
-export type TransactionsAggregateQuery = {
-  __typename?: 'Query';
-  transactionsAggregate: {
-    __typename?: 'TrxAggregate';
-    statement: Array<{
-      __typename?: 'StatementEntry';
-      _id: string;
-      symbol: string;
-      assetType: AssetType;
-      trxType: string;
-      date: string;
-      amount: number;
-      balance?: number | null;
-      comment?: string | null;
-      qty?: number | null;
-      portfolio?: { __typename?: 'Portfolio'; _id?: string | null; name?: string | null } | null;
-      security?:
-        | { __typename?: 'Equity'; name: string }
-        | { __typename?: 'Fund'; name: string }
-        | { __typename?: 'Index'; name: string }
-        | null;
-    } | null>;
-    holdings: Array<{
-      __typename?: 'StockTransactions';
-      symbol: string;
-      assetType: string;
-      qty: number;
-      costPrice?: number | null;
-      profitLossBooked?: number | null;
-      valueAtCostPrice?: number | null;
-      currentPrice?: number | null;
-      valueAtCurrentPrice?: number | null;
-      date?: string | null;
-      currentPnL?: number | null;
-      currency?: string | null;
-      baseCurrency?: string | null;
-      currencyCostPrice?: number | null;
-      valueAtCurrencyCostPrice?: number | null;
-      stock?:
-        | {
-            __typename?: 'Equity';
-            name: string;
-            currentStatus?: Array<{
-              __typename?: 'ICurrentStatus';
-              interval?: Interval | null;
-              aroon20Strategy?: { __typename?: 'IPossibleTrade'; type?: TradeType | null } | null;
-              aroon200Strategy?: { __typename?: 'IPossibleTrade'; type?: TradeType | null } | null;
-              aroon50Strategy?: { __typename?: 'IPossibleTrade'; type?: TradeType | null } | null;
-            } | null> | null;
-            watchlists?: Array<{ __typename?: 'Watchlist'; name: string } | null> | null;
-          }
-        | {
-            __typename?: 'Fund';
-            name: string;
-            currentStatus?: Array<{
-              __typename?: 'ICurrentStatus';
-              interval?: Interval | null;
-              aroon20Strategy?: { __typename?: 'IPossibleTrade'; type?: TradeType | null } | null;
-              aroon200Strategy?: { __typename?: 'IPossibleTrade'; type?: TradeType | null } | null;
-              aroon50Strategy?: { __typename?: 'IPossibleTrade'; type?: TradeType | null } | null;
-            } | null> | null;
-            watchlists?: Array<{ __typename?: 'Watchlist'; name: string } | null> | null;
-          }
-        | {
-            __typename?: 'Index';
-            name: string;
-            currentStatus?: Array<{
-              __typename?: 'ICurrentStatus';
-              interval?: Interval | null;
-              aroon20Strategy?: { __typename?: 'IPossibleTrade'; type?: TradeType | null } | null;
-              aroon200Strategy?: { __typename?: 'IPossibleTrade'; type?: TradeType | null } | null;
-              aroon50Strategy?: { __typename?: 'IPossibleTrade'; type?: TradeType | null } | null;
-            } | null> | null;
-            watchlists?: Array<{ __typename?: 'Watchlist'; name: string } | null> | null;
-          }
-        | null;
-    } | null>;
-    cash: { __typename?: 'Cash'; cashIn: number; cashOut: number; currentCash: number };
-  };
-  cashTransactions: Array<{
-    __typename?: 'Transaction';
-    _id: string;
-    date: string;
-    amount: number;
-    trxType: string;
-  } | null>;
-};
+
+export type TransactionsAggregateQuery = { __typename?: 'Query', transactionsAggregate: { __typename?: 'TrxAggregate', statement: Array<{ __typename?: 'StatementEntry', _id: string, symbol: string, assetType: AssetType, trxType: string, date: string, amount: number, balance?: number | null, comment?: string | null, qty?: number | null, portfolio?: { __typename?: 'Portfolio', _id?: string | null, name?: string | null } | null, security?: { __typename?: 'Equity', name: string } | { __typename?: 'Fund', name: string } | { __typename?: 'Index', name: string } | null } | null>, holdings: Array<{ __typename?: 'StockTransactions', symbol: string, assetType: string, qty: number, costPrice?: number | null, profitLossBooked?: number | null, valueAtCostPrice?: number | null, currentPrice?: number | null, valueAtCurrentPrice?: number | null, date?: string | null, currentPnL?: number | null, currency?: string | null, baseCurrency?: string | null, currencyCostPrice?: number | null, valueAtCurrencyCostPrice?: number | null, stock?: { __typename?: 'Equity', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Fund', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | { __typename?: 'Index', name: string, currentStatus?: Array<{ __typename?: 'ICurrentStatus', interval?: Interval | null, aroon20Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon200Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null, aroon50Strategy?: { __typename?: 'IPossibleTrade', type?: TradeType | null } | null } | null> | null, watchlists?: Array<{ __typename?: 'Watchlist', name: string } | null> | null } | null } | null>, cash: { __typename?: 'Cash', cashIn: number, cashOut: number, currentCash: number } }, cashTransactions: Array<{ __typename?: 'Transaction', _id: string, date: string, amount: number, trxType: string } | null> };
 
 export type AddTransactionMutationVariables = Exact<{
   input: TransactionInput;
 }>;
 
-export type AddTransactionMutation = {
-  __typename?: 'Mutation';
-  addTransaction: {
-    __typename?: 'Transaction';
-    _id: string;
-    pfId: string;
-    user: string;
-    symbol: string;
-    date: string;
-    comment?: string | null;
-    assetType: AssetType;
-    trxType: string;
-    amount: number;
-    qty?: number | null;
-    price?: number | null;
-    brokerage?: number | null;
-    trxValue?: number | null;
-  };
-};
+
+export type AddTransactionMutation = { __typename?: 'Mutation', addTransaction: { __typename?: 'Transaction', _id: string, pfId: string, user: string, symbol: string, date: string, comment?: string | null, assetType: AssetType, trxType: string, amount: number, qty?: number | null, price?: number | null, brokerage?: number | null, trxValue?: number | null } };
 
 export type AddTransactionsMutationVariables = Exact<{
   input: Array<InputMaybe<TransactionInput>> | InputMaybe<TransactionInput>;
 }>;
 
-export type AddTransactionsMutation = {
-  __typename?: 'Mutation';
-  addTransactions: { __typename?: 'SuccessResponse'; success?: boolean | null };
-};
+
+export type AddTransactionsMutation = { __typename?: 'Mutation', addTransactions: { __typename?: 'SuccessResponse', success?: boolean | null } };
 
 export type EditTransactionMutationVariables = Exact<{
   editTransactionInput2: EditTransactionInput;
 }>;
 
-export type EditTransactionMutation = {
-  __typename?: 'Mutation';
-  editTransaction?: { __typename?: 'EditTransactionResponse'; _id?: string | null } | null;
-};
+
+export type EditTransactionMutation = { __typename?: 'Mutation', editTransaction?: { __typename?: 'EditTransactionResponse', _id?: string | null } | null };
+
 
 export const AnalyzeStrategyForStockNewDocument = gql`
-  query AnalyzeStrategyForStockNew($symbol: String!) {
-    analyzeStrategyForStockNew(symbol: $symbol) {
-      trades {
-        symbol
+    query AnalyzeStrategyForStockNew($symbol: String!) {
+  analyzeStrategyForStockNew(symbol: $symbol) {
+    trades {
+      symbol
+      type
+      date
+      close
+      risk
+      relatedTrade {
         type
-        date
         close
-        risk
-        relatedTrade {
-          type
-          close
-          date
-          symbol
-        }
-        security {
-          country
-          name
-          watchlists {
-            name
-          }
-          portfolios {
-            pf {
-              name
-              symbols
-            }
-            qty
-          }
-        }
+        date
+        symbol
       }
-      quotes {
-        date
-        open
-        high
-        low
-        close
-        atrTrade {
-          stopLoss
+      security {
+        country
+        name
+        watchlists {
+          name
+        }
+        portfolios {
+          pf {
+            name
+            symbols
+          }
+          qty
         }
       }
     }
+    quotes {
+      date
+      open
+      high
+      low
+      close
+      atrTrade {
+        stopLoss
+      }
+    }
   }
-`;
+}
+    `;
 
 /**
  * __useAnalyzeStrategyForStockNewQuery__
@@ -1167,78 +877,53 @@ export const AnalyzeStrategyForStockNewDocument = gql`
  *   },
  * });
  */
-export function useAnalyzeStrategyForStockNewQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    AnalyzeStrategyForStockNewQuery,
-    AnalyzeStrategyForStockNewQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<AnalyzeStrategyForStockNewQuery, AnalyzeStrategyForStockNewQueryVariables>(
-    AnalyzeStrategyForStockNewDocument,
-    options,
-  );
-}
-
-export function useAnalyzeStrategyForStockNewLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    AnalyzeStrategyForStockNewQuery,
-    AnalyzeStrategyForStockNewQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    AnalyzeStrategyForStockNewQuery,
-    AnalyzeStrategyForStockNewQueryVariables
-  >(AnalyzeStrategyForStockNewDocument, options);
-}
-
-export type AnalyzeStrategyForStockNewQueryHookResult = ReturnType<
-  typeof useAnalyzeStrategyForStockNewQuery
->;
-export type AnalyzeStrategyForStockNewLazyQueryHookResult = ReturnType<
-  typeof useAnalyzeStrategyForStockNewLazyQuery
->;
-export type AnalyzeStrategyForStockNewQueryResult = Apollo.QueryResult<
-  AnalyzeStrategyForStockNewQuery,
-  AnalyzeStrategyForStockNewQueryVariables
->;
-export const GetAlgoTradesDocument = gql`
-  query GetAlgoTrades {
-    getAlgoTrades {
-      close
-      date
-      symbol
-      type
-      daysSinceEma200Increasing
-      daysSinceAboveEma200
-      atr
-      weightedATR
-      hasAnomaly
-      relatedTrade {
-        type
-        date
-        close
-        symbol
+export function useAnalyzeStrategyForStockNewQuery(baseOptions: Apollo.QueryHookOptions<AnalyzeStrategyForStockNewQuery, AnalyzeStrategyForStockNewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AnalyzeStrategyForStockNewQuery, AnalyzeStrategyForStockNewQueryVariables>(AnalyzeStrategyForStockNewDocument, options);
       }
-      risk
-      security {
-        country
+export function useAnalyzeStrategyForStockNewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AnalyzeStrategyForStockNewQuery, AnalyzeStrategyForStockNewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AnalyzeStrategyForStockNewQuery, AnalyzeStrategyForStockNewQueryVariables>(AnalyzeStrategyForStockNewDocument, options);
+        }
+export type AnalyzeStrategyForStockNewQueryHookResult = ReturnType<typeof useAnalyzeStrategyForStockNewQuery>;
+export type AnalyzeStrategyForStockNewLazyQueryHookResult = ReturnType<typeof useAnalyzeStrategyForStockNewLazyQuery>;
+export type AnalyzeStrategyForStockNewQueryResult = Apollo.QueryResult<AnalyzeStrategyForStockNewQuery, AnalyzeStrategyForStockNewQueryVariables>;
+export const GetAlgoTradesDocument = gql`
+    query GetAlgoTrades {
+  getAlgoTrades {
+    close
+    date
+    symbol
+    type
+    daysSinceEma200Increasing
+    daysSinceAboveEma200
+    atr
+    weightedATR
+    hasAnomaly
+    relatedTrade {
+      type
+      date
+      close
+      symbol
+    }
+    risk
+    security {
+      country
+      name
+      watchlists {
         name
-        watchlists {
+      }
+      portfolios {
+        pf {
           name
+          symbols
         }
-        portfolios {
-          pf {
-            name
-            symbols
-          }
-          qty
-        }
+        qty
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useGetAlgoTradesQuery__
@@ -1255,39 +940,24 @@ export const GetAlgoTradesDocument = gql`
  *   },
  * });
  */
-export function useGetAlgoTradesQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>(
-    GetAlgoTradesDocument,
-    options,
-  );
-}
-
-export function useGetAlgoTradesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>(
-    GetAlgoTradesDocument,
-    options,
-  );
-}
-
+export function useGetAlgoTradesQuery(baseOptions?: Apollo.QueryHookOptions<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>(GetAlgoTradesDocument, options);
+      }
+export function useGetAlgoTradesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>(GetAlgoTradesDocument, options);
+        }
 export type GetAlgoTradesQueryHookResult = ReturnType<typeof useGetAlgoTradesQuery>;
 export type GetAlgoTradesLazyQueryHookResult = ReturnType<typeof useGetAlgoTradesLazyQuery>;
-export type GetAlgoTradesQueryResult = Apollo.QueryResult<
-  GetAlgoTradesQuery,
-  GetAlgoTradesQueryVariables
->;
+export type GetAlgoTradesQueryResult = Apollo.QueryResult<GetAlgoTradesQuery, GetAlgoTradesQueryVariables>;
 export const GetLatestQuoteDocument = gql`
-  query getLatestQuote($symbol: String) {
-    getLatestQuote(symbol: $symbol) {
-      close
-    }
+    query getLatestQuote($symbol: String) {
+  getLatestQuote(symbol: $symbol) {
+    close
   }
-`;
+}
+    `;
 
 /**
  * __useGetLatestQuoteQuery__
@@ -1305,40 +975,25 @@ export const GetLatestQuoteDocument = gql`
  *   },
  * });
  */
-export function useGetLatestQuoteQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>(
-    GetLatestQuoteDocument,
-    options,
-  );
-}
-
-export function useGetLatestQuoteLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>(
-    GetLatestQuoteDocument,
-    options,
-  );
-}
-
+export function useGetLatestQuoteQuery(baseOptions?: Apollo.QueryHookOptions<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>(GetLatestQuoteDocument, options);
+      }
+export function useGetLatestQuoteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>(GetLatestQuoteDocument, options);
+        }
 export type GetLatestQuoteQueryHookResult = ReturnType<typeof useGetLatestQuoteQuery>;
 export type GetLatestQuoteLazyQueryHookResult = ReturnType<typeof useGetLatestQuoteLazyQuery>;
-export type GetLatestQuoteQueryResult = Apollo.QueryResult<
-  GetLatestQuoteQuery,
-  GetLatestQuoteQueryVariables
->;
+export type GetLatestQuoteQueryResult = Apollo.QueryResult<GetLatestQuoteQuery, GetLatestQuoteQueryVariables>;
 export const PortfoliosDocument = gql`
-  query Portfolios {
-    portfolios {
-      _id
-      name
-    }
+    query Portfolios {
+  portfolios {
+    _id
+    name
   }
-`;
+}
+    `;
 
 /**
  * __usePortfoliosQuery__
@@ -1355,54 +1010,46 @@ export const PortfoliosDocument = gql`
  *   },
  * });
  */
-export function usePortfoliosQuery(
-  baseOptions?: Apollo.QueryHookOptions<PortfoliosQuery, PortfoliosQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PortfoliosQuery, PortfoliosQueryVariables>(PortfoliosDocument, options);
-}
-
-export function usePortfoliosLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<PortfoliosQuery, PortfoliosQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<PortfoliosQuery, PortfoliosQueryVariables>(
-    PortfoliosDocument,
-    options,
-  );
-}
-
+export function usePortfoliosQuery(baseOptions?: Apollo.QueryHookOptions<PortfoliosQuery, PortfoliosQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PortfoliosQuery, PortfoliosQueryVariables>(PortfoliosDocument, options);
+      }
+export function usePortfoliosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PortfoliosQuery, PortfoliosQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PortfoliosQuery, PortfoliosQueryVariables>(PortfoliosDocument, options);
+        }
 export type PortfoliosQueryHookResult = ReturnType<typeof usePortfoliosQuery>;
 export type PortfoliosLazyQueryHookResult = ReturnType<typeof usePortfoliosLazyQuery>;
 export type PortfoliosQueryResult = Apollo.QueryResult<PortfoliosQuery, PortfoliosQueryVariables>;
 export const AllSecuritiesDocument = gql`
-  query AllSecurities {
-    allSecurities {
-      currentStatus {
-        daysSinceEma200Increasing
-        daysSinceEma50Increasing
-        daysSinceEma20Increasing
-        aroon200Strategy {
-          type
-        }
+    query AllSecurities {
+  allSecurities {
+    currentStatus {
+      daysSinceEma200Increasing
+      daysSinceEma50Increasing
+      daysSinceEma20Increasing
+      aroon200Strategy {
+        type
       }
-      symbol
+    }
+    symbol
+    name
+    country
+    exchange
+    watchlists {
       name
-      country
-      watchlists {
+    }
+    portfolios {
+      pf {
         name
       }
-      portfolios {
-        pf {
-          name
-        }
-        qty
-      }
-      lastQuoteUpdate
-      type
+      qty
     }
+    lastQuoteUpdate
+    type
   }
-`;
+}
+    `;
 
 /**
  * __useAllSecuritiesQuery__
@@ -1419,40 +1066,25 @@ export const AllSecuritiesDocument = gql`
  *   },
  * });
  */
-export function useAllSecuritiesQuery(
-  baseOptions?: Apollo.QueryHookOptions<AllSecuritiesQuery, AllSecuritiesQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<AllSecuritiesQuery, AllSecuritiesQueryVariables>(
-    AllSecuritiesDocument,
-    options,
-  );
-}
-
-export function useAllSecuritiesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<AllSecuritiesQuery, AllSecuritiesQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<AllSecuritiesQuery, AllSecuritiesQueryVariables>(
-    AllSecuritiesDocument,
-    options,
-  );
-}
-
+export function useAllSecuritiesQuery(baseOptions?: Apollo.QueryHookOptions<AllSecuritiesQuery, AllSecuritiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllSecuritiesQuery, AllSecuritiesQueryVariables>(AllSecuritiesDocument, options);
+      }
+export function useAllSecuritiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllSecuritiesQuery, AllSecuritiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllSecuritiesQuery, AllSecuritiesQueryVariables>(AllSecuritiesDocument, options);
+        }
 export type AllSecuritiesQueryHookResult = ReturnType<typeof useAllSecuritiesQuery>;
 export type AllSecuritiesLazyQueryHookResult = ReturnType<typeof useAllSecuritiesLazyQuery>;
-export type AllSecuritiesQueryResult = Apollo.QueryResult<
-  AllSecuritiesQuery,
-  AllSecuritiesQueryVariables
->;
+export type AllSecuritiesQueryResult = Apollo.QueryResult<AllSecuritiesQuery, AllSecuritiesQueryVariables>;
 export const GetLiveQuoteDocument = gql`
-  query getLiveQuote($symbol: String!) {
-    liveQuote(symbol: $symbol) {
-      close
-      previousClose
-    }
+    query getLiveQuote($symbol: String!) {
+  liveQuote(symbol: $symbol) {
+    close
+    previousClose
   }
-`;
+}
+    `;
 
 /**
  * __useGetLiveQuoteQuery__
@@ -1470,101 +1102,86 @@ export const GetLiveQuoteDocument = gql`
  *   },
  * });
  */
-export function useGetLiveQuoteQuery(
-  baseOptions: Apollo.QueryHookOptions<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>(
-    GetLiveQuoteDocument,
-    options,
-  );
-}
-
-export function useGetLiveQuoteLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>(
-    GetLiveQuoteDocument,
-    options,
-  );
-}
-
+export function useGetLiveQuoteQuery(baseOptions: Apollo.QueryHookOptions<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>(GetLiveQuoteDocument, options);
+      }
+export function useGetLiveQuoteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>(GetLiveQuoteDocument, options);
+        }
 export type GetLiveQuoteQueryHookResult = ReturnType<typeof useGetLiveQuoteQuery>;
 export type GetLiveQuoteLazyQueryHookResult = ReturnType<typeof useGetLiveQuoteLazyQuery>;
-export type GetLiveQuoteQueryResult = Apollo.QueryResult<
-  GetLiveQuoteQuery,
-  GetLiveQuoteQueryVariables
->;
+export type GetLiveQuoteQueryResult = Apollo.QueryResult<GetLiveQuoteQuery, GetLiveQuoteQueryVariables>;
 export const TransactionsAggregateDocument = gql`
-  query TransactionsAggregate($pfIds: String, $dateTo: String) {
-    transactionsAggregate(pfIds: $pfIds) {
-      statement {
-        _id
-        symbol
-        assetType
-        trxType
-        date
-        amount
-        balance
-        comment
-        qty
-        portfolio {
-          _id
-          name
-        }
-        security {
-          name
-        }
-      }
-      holdings {
-        symbol
-        assetType
-        qty
-        costPrice
-        profitLossBooked
-        valueAtCostPrice
-        currentPrice
-        valueAtCurrentPrice
-        date
-        currentPnL
-        stock {
-          name
-          currentStatus {
-            interval
-            aroon20Strategy {
-              type
-            }
-            aroon200Strategy {
-              type
-            }
-            aroon50Strategy {
-              type
-            }
-          }
-          watchlists {
-            name
-          }
-        }
-        currency
-        baseCurrency
-        currencyCostPrice
-        valueAtCurrencyCostPrice
-      }
-      cash {
-        cashIn
-        cashOut
-        currentCash
-      }
-    }
-    cashTransactions: transactions(symbol: "CASH", pfIds: $pfIds, dateTo: $dateTo) {
+    query TransactionsAggregate($pfIds: String, $dateTo: String) {
+  transactionsAggregate(pfIds: $pfIds) {
+    statement {
       _id
+      symbol
+      assetType
+      trxType
       date
       amount
-      trxType
+      balance
+      comment
+      qty
+      portfolio {
+        _id
+        name
+      }
+      security {
+        name
+      }
+    }
+    holdings {
+      symbol
+      assetType
+      qty
+      costPrice
+      profitLossBooked
+      valueAtCostPrice
+      currentPrice
+      valueAtCurrentPrice
+      date
+      currentPnL
+      stock {
+        name
+        currentStatus {
+          interval
+          aroon20Strategy {
+            type
+          }
+          aroon200Strategy {
+            type
+          }
+          aroon50Strategy {
+            type
+          }
+        }
+        watchlists {
+          name
+        }
+      }
+      currency
+      baseCurrency
+      currencyCostPrice
+      valueAtCurrencyCostPrice
+    }
+    cash {
+      cashIn
+      cashOut
+      currentCash
     }
   }
-`;
+  cashTransactions: transactions(symbol: "CASH", pfIds: $pfIds, dateTo: $dateTo) {
+    _id
+    date
+    amount
+    trxType
+  }
+}
+    `;
 
 /**
  * __useTransactionsAggregateQuery__
@@ -1583,63 +1200,37 @@ export const TransactionsAggregateDocument = gql`
  *   },
  * });
  */
-export function useTransactionsAggregateQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    TransactionsAggregateQuery,
-    TransactionsAggregateQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<TransactionsAggregateQuery, TransactionsAggregateQueryVariables>(
-    TransactionsAggregateDocument,
-    options,
-  );
-}
-
-export function useTransactionsAggregateLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    TransactionsAggregateQuery,
-    TransactionsAggregateQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<TransactionsAggregateQuery, TransactionsAggregateQueryVariables>(
-    TransactionsAggregateDocument,
-    options,
-  );
-}
-
+export function useTransactionsAggregateQuery(baseOptions?: Apollo.QueryHookOptions<TransactionsAggregateQuery, TransactionsAggregateQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TransactionsAggregateQuery, TransactionsAggregateQueryVariables>(TransactionsAggregateDocument, options);
+      }
+export function useTransactionsAggregateLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TransactionsAggregateQuery, TransactionsAggregateQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TransactionsAggregateQuery, TransactionsAggregateQueryVariables>(TransactionsAggregateDocument, options);
+        }
 export type TransactionsAggregateQueryHookResult = ReturnType<typeof useTransactionsAggregateQuery>;
-export type TransactionsAggregateLazyQueryHookResult = ReturnType<
-  typeof useTransactionsAggregateLazyQuery
->;
-export type TransactionsAggregateQueryResult = Apollo.QueryResult<
-  TransactionsAggregateQuery,
-  TransactionsAggregateQueryVariables
->;
+export type TransactionsAggregateLazyQueryHookResult = ReturnType<typeof useTransactionsAggregateLazyQuery>;
+export type TransactionsAggregateQueryResult = Apollo.QueryResult<TransactionsAggregateQuery, TransactionsAggregateQueryVariables>;
 export const AddTransactionDocument = gql`
-  mutation AddTransaction($input: TransactionInput!) {
-    addTransaction(input: $input) {
-      _id
-      pfId
-      user
-      symbol
-      date
-      comment
-      assetType
-      trxType
-      amount
-      qty
-      price
-      brokerage
-      trxValue
-    }
+    mutation AddTransaction($input: TransactionInput!) {
+  addTransaction(input: $input) {
+    _id
+    pfId
+    user
+    symbol
+    date
+    comment
+    assetType
+    trxType
+    amount
+    qty
+    price
+    brokerage
+    trxValue
   }
-`;
-export type AddTransactionMutationFn = Apollo.MutationFunction<
-  AddTransactionMutation,
-  AddTransactionMutationVariables
->;
+}
+    `;
+export type AddTransactionMutationFn = Apollo.MutationFunction<AddTransactionMutation, AddTransactionMutationVariables>;
 
 /**
  * __useAddTransactionMutation__
@@ -1658,33 +1249,21 @@ export type AddTransactionMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useAddTransactionMutation(
-  baseOptions?: Apollo.MutationHookOptions<AddTransactionMutation, AddTransactionMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<AddTransactionMutation, AddTransactionMutationVariables>(
-    AddTransactionDocument,
-    options,
-  );
-}
-
+export function useAddTransactionMutation(baseOptions?: Apollo.MutationHookOptions<AddTransactionMutation, AddTransactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddTransactionMutation, AddTransactionMutationVariables>(AddTransactionDocument, options);
+      }
 export type AddTransactionMutationHookResult = ReturnType<typeof useAddTransactionMutation>;
 export type AddTransactionMutationResult = Apollo.MutationResult<AddTransactionMutation>;
-export type AddTransactionMutationOptions = Apollo.BaseMutationOptions<
-  AddTransactionMutation,
-  AddTransactionMutationVariables
->;
+export type AddTransactionMutationOptions = Apollo.BaseMutationOptions<AddTransactionMutation, AddTransactionMutationVariables>;
 export const AddTransactionsDocument = gql`
-  mutation AddTransactions($input: [TransactionInput]!) {
-    addTransactions(input: $input) {
-      success
-    }
+    mutation AddTransactions($input: [TransactionInput]!) {
+  addTransactions(input: $input) {
+    success
   }
-`;
-export type AddTransactionsMutationFn = Apollo.MutationFunction<
-  AddTransactionsMutation,
-  AddTransactionsMutationVariables
->;
+}
+    `;
+export type AddTransactionsMutationFn = Apollo.MutationFunction<AddTransactionsMutation, AddTransactionsMutationVariables>;
 
 /**
  * __useAddTransactionsMutation__
@@ -1703,36 +1282,21 @@ export type AddTransactionsMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useAddTransactionsMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AddTransactionsMutation,
-    AddTransactionsMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<AddTransactionsMutation, AddTransactionsMutationVariables>(
-    AddTransactionsDocument,
-    options,
-  );
-}
-
+export function useAddTransactionsMutation(baseOptions?: Apollo.MutationHookOptions<AddTransactionsMutation, AddTransactionsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddTransactionsMutation, AddTransactionsMutationVariables>(AddTransactionsDocument, options);
+      }
 export type AddTransactionsMutationHookResult = ReturnType<typeof useAddTransactionsMutation>;
 export type AddTransactionsMutationResult = Apollo.MutationResult<AddTransactionsMutation>;
-export type AddTransactionsMutationOptions = Apollo.BaseMutationOptions<
-  AddTransactionsMutation,
-  AddTransactionsMutationVariables
->;
+export type AddTransactionsMutationOptions = Apollo.BaseMutationOptions<AddTransactionsMutation, AddTransactionsMutationVariables>;
 export const EditTransactionDocument = gql`
-  mutation EditTransaction($editTransactionInput2: EditTransactionInput!) {
-    editTransaction(input: $editTransactionInput2) {
-      _id
-    }
+    mutation EditTransaction($editTransactionInput2: EditTransactionInput!) {
+  editTransaction(input: $editTransactionInput2) {
+    _id
   }
-`;
-export type EditTransactionMutationFn = Apollo.MutationFunction<
-  EditTransactionMutation,
-  EditTransactionMutationVariables
->;
+}
+    `;
+export type EditTransactionMutationFn = Apollo.MutationFunction<EditTransactionMutation, EditTransactionMutationVariables>;
 
 /**
  * __useEditTransactionMutation__
@@ -1751,22 +1315,10 @@ export type EditTransactionMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useEditTransactionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    EditTransactionMutation,
-    EditTransactionMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<EditTransactionMutation, EditTransactionMutationVariables>(
-    EditTransactionDocument,
-    options,
-  );
-}
-
+export function useEditTransactionMutation(baseOptions?: Apollo.MutationHookOptions<EditTransactionMutation, EditTransactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditTransactionMutation, EditTransactionMutationVariables>(EditTransactionDocument, options);
+      }
 export type EditTransactionMutationHookResult = ReturnType<typeof useEditTransactionMutation>;
 export type EditTransactionMutationResult = Apollo.MutationResult<EditTransactionMutation>;
-export type EditTransactionMutationOptions = Apollo.BaseMutationOptions<
-  EditTransactionMutation,
-  EditTransactionMutationVariables
->;
+export type EditTransactionMutationOptions = Apollo.BaseMutationOptions<EditTransactionMutation, EditTransactionMutationVariables>;

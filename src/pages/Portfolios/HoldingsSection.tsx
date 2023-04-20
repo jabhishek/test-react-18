@@ -36,7 +36,7 @@ export const HoldingsSection = ({
     () =>
       aggregate?.holdings?.filter((x) => {
         if (selectedHoldingFilter?.value === 'holdings') {
-          return x && x.qty > 0;
+          return x && x.qty !== 0;
         }
         if (selectedHoldingFilter?.value === 'no-holdings') {
           return x && x.qty === 0;

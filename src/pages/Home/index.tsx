@@ -1,6 +1,6 @@
-import { Box, Modal, ModalCloseButton, ModalContent, ModalOverlay } from '@chakra-ui/react';
-import { useAllSecuritiesQuery } from '../../generated/graphql';
-import { useMemo, useState } from 'react';
+import { Box, Button, Modal, ModalCloseButton, ModalContent, ModalOverlay } from '@chakra-ui/react';
+import { AllSecuritiesQuery, useAllSecuritiesQuery } from '../../generated/graphql';
+import { useMemo, useRef, useState } from 'react';
 import { ColDef } from '@ag-grid-community/core';
 
 import { AgGridReact } from '@ag-grid-community/react';
@@ -10,8 +10,10 @@ import { AnalyzeSecurity } from '../../components/AnalyzeSecurity';
 import styles from '../../components/Grids/grids.module.css';
 
 const Securities = () => {
+  const [selected, setSelected] = useState<Array<string>>([]);
+  const gridRef = useRef<AgGridReact>(null);
   const [selectedSymbol, setSelectedSymbol] = useState<string | null>(null);
-  const { data, loading } = useAllSecuritiesQuery();
+  const { data, loading, refetch } = useAllSecuritiesQuery();
 
   const flattened = useMemo(
     () =>
@@ -34,6 +36,7 @@ const Securities = () => {
       field: 'symbol',
       resizable: true,
       cellClass: `${styles.flex}`,
+      checkboxSelection: true,
     },
     {
       field: 'name',
@@ -41,14 +44,14 @@ const Securities = () => {
       cellClass: `${styles.flex}`,
     },
     /*
-    {
-      field: 'liveQuote',
-      resizable: true,
-      cellRenderer: LiveQuoteCellRenderer,
-      cellClass: `${styles.flex} ${styles.justifyRight}`,
-      headerClass: `ag-right-aligned-header`,
-    },
-*/
+        {
+          field: 'liveQuote',
+          resizable: true,
+          cellRenderer: LiveQuoteCellRenderer,
+          cellClass: `${styles.flex} ${styles.justifyRight}`,
+          headerClass: `ag-right-aligned-header`,
+        },
+    */
     {
       field: 'country',
       resizable: true,
@@ -86,12 +89,30 @@ const Securities = () => {
       filter: 'agNumberColumnFilter',
     },
   ];
-  console.log('data', flattened, loading);
+  console.log('selected', selected);
 
   return (
     <Box>
+      <Box py={2} px={4}>
+        <Button
+          onClick={() => {
+            const symbols = selected.join(',');
+            fetch(`http://localhost:5001/api/security/${symbols}`, { method: 'DELETE' }).then(
+              (x) => {
+                x.json().then((y) => {
+                  console.log('y', y);
+                  refetch();
+                });
+              },
+            );
+          }}
+          disabled={!selected?.length}>
+          Delete
+        </Button>
+      </Box>
       <div className="ag-theme-alpine">
         <AgGridReact
+          ref={gridRef}
           rowHeight={50}
           className={''}
           columnDefs={columnDefs}
@@ -108,6 +129,18 @@ const Securities = () => {
           paginationPageSize={50}
           onRowClicked={({ data }) => {
             setSelectedSymbol(data?.symbol);
+          }}
+          rowSelection={'multiple'}
+          suppressRowClickSelection={true}
+          // onRowSelected={({data}) => {
+          //     console.log('data', data);
+          // }}
+          onSelectionChanged={() => {
+            const selectedRows: AllSecuritiesQuery['allSecurities'] =
+              gridRef?.current?.api.getSelectedRows();
+            console.log('selectedRows', selectedRows);
+
+            setSelected(selectedRows?.map((x) => x?.symbol ?? '') ?? []);
           }}
         />
       </div>

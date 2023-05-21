@@ -14,6 +14,7 @@ export const AllSecurities = gql`
       symbol
       name
       country
+      exchange
       watchlists {
         name
       }

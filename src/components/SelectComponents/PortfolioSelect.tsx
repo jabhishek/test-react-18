@@ -25,6 +25,7 @@ export const PortfolioSelect = ({
       onChange={(value) => {
         setSelectedPortfolio([...value]);
       }}
+      placeholder={'Select Portfolio'}
     />
   );
 };
